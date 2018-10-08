@@ -1,12 +1,12 @@
 """Based On A True Story Model Database"""
 
-
 from flask_sqlalchemy import SQLAlchemy
 
-db = SQLAlchemy
+db = SQLAlchemy()
 
 ###########################################################
-# Model difinitions
+# Model definitions                                       #
+###########################################################
 
 class User(db.Model):
     """User class"""
@@ -49,6 +49,7 @@ class Truth(db.Model):
     resource_submission = db.Column(db.String(500), nullable=True)
 
 
+
     movie = db.relationship("Movie",
                             backref=db.backref("truths",
                             order_by=truth_id))
@@ -71,6 +72,7 @@ class Rating(db.Model):
     rating = db.Column(db.Integer, nullable=True)
 
 
+
     truth = db.relationship("Truth",
                             backref=db.backref("truth_ratings",
                             order_by=rating_id))
@@ -80,8 +82,23 @@ class Rating(db.Model):
                             order_by=rating_id))
 
 
+###########################################################
+# Helper Functions                                        #
+###########################################################
+
+def connect_to_db(app):
+    """Connect the database to Flask app"""
+
+    app.config['SQLAlchemy_DATABASE_URI'] = 'postgresql:///true_story'
+    app.config['SQLAlchemy_TRACK_MODIFICATIONS'] = False
+    db.app = app
+    db.init_app(app)
 
 
+if __name__ == "__main__":
 
+    from server import app
+    connect_to_db(app)
+    print("Connected to DB!")
 
 
