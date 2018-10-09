@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 ###########################################################
-# Model definitions                                       #
+# Model definitions #                                      
 ###########################################################
 
 class User(db.Model):
@@ -83,7 +83,7 @@ class Rating(db.Model):
 
 
 ###########################################################
-# Helper Functions                                        #
+# Helper Functions #
 ###########################################################
 
 def connect_to_db(app):
