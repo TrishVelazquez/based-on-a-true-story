@@ -54,7 +54,7 @@ def process_new_user():
 
 ###########################################################
 
-if __name__ == "__main__"
+if __name__ == "__main__":
 
     app.debug = True
     app.jinja_env.auto_reload = app.debug
