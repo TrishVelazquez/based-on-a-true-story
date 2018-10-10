@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %} Log In {% endblock %}
+
+{% block content %}
+
+<h1> Welcome Back </h1>
+
+    <form action="/login-verify" method="POST">
+
+        Email: <input type="text" name="email">
+        Password: <input type="password" name="password">
+
+        <input type="submit">
+
+    </form>
+
+{% endblock %}
