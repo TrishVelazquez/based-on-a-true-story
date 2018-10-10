@@ -1,5 +1,6 @@
 """Based On A True Story Model Database"""
 
+import datetime
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
@@ -7,6 +8,7 @@ db = SQLAlchemy()
 ###########################################################
 # Model definitions #                                      
 ###########################################################
+
 
 class User(db.Model):
     """User class"""
@@ -16,7 +18,9 @@ class User(db.Model):
     user_id = db.Column(db.Integer, 
                         autoincrement=True, 
                         primary_key=True)
-    email = db.Column(db.String(50), nullable=False)
+    username = db.Column(db.String(30), unique=True, nullable=False)
+    name = db.Column(db.String(50), nullable=True, default='Anonymous')
+    email = db.Column(db.String(100), nullable=False)
     password = db.Column(db.String(50), nullable=False)
 
 
@@ -29,10 +33,10 @@ class Movie(db.Model):
                         autoincrement=True, 
                         primary_key=True)
     title = db.Column(db.String(200), nullable=False)
+    genre = db.Column(db.String(500), nullable=False)
     plot = db.Column(db.String(500), nullable=False)
-    poster = db.Column(db.String(300), nullable=True)
-    true_story = db.Column(db.Integer, nullable=True)
-    amazon_url = db.Column(db.String(300), nullable=True)
+    poster = db.Column(db.String(500), nullable=False)
+    website_url = db.Column(db.String(500), nullable=False)
 
 
 class Truth(db.Model):
@@ -43,20 +47,16 @@ class Truth(db.Model):
     truth_id = db.Column(db.Integer,
                         autoincrement=True,
                         primary_key=True)
-    movie_id = db.Column(db.Integer, db.ForeignKey('movies.movie_id'), nullable=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=True)
+    movie_id = db.Column(db.Integer, db.ForeignKey('movies.movie_id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    truth_title = db.Column(db.String(100), nullable=False)
     truth_submission = db.Column(db.String(500), nullable=False)
     resource_submission = db.Column(db.String(500), nullable=True)
+    date_submitted = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
+    movie = db.relationship("Movie")
 
-
-    movie = db.relationship("Movie",
-                            backref=db.backref("truths",
-                            order_by=truth_id))
-
-    user = db.relationship("User",
-                            backref=db.backref("truths",
-                            order_by=truth_id))
+    user = db.relationship("User")
 
 
 class Rating(db.Model):
@@ -67,19 +67,28 @@ class Rating(db.Model):
     rating_id = db.Column(db.Integer,
                         autoincrement=True,
                         primary_key=True)
-    truth_id = db.Column(db.Integer, db.ForeignKey('truths.truth_id'), nullable=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=True)
-    rating = db.Column(db.Integer, nullable=True)
+    truth_id = db.Column(db.Integer, db.ForeignKey('truths.truth_id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    rating = db.Column(db.Integer, nullable=False)
+    date_submitted = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+
+    truth = db.relationship("Truth")
 
 
+class Reply(db.Model):
+    """Reply Class"""
 
-    truth = db.relationship("Truth",
-                            backref=db.backref("truth_ratings",
-                            order_by=rating_id))
+    __tablename__ = "replies"
 
-    user = db.relationship("User",
-                            backref=db.backref("truth_ratings",
-                            order_by=rating_id))
+    reply_id = db.Column(db.Integer,
+                        autoincrement=True,
+                        primary_key=True)
+    truth_id = db.Column(db.Integer, db.ForeignKey('truths.truth_id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    comment = db.Column(db.String(300), nullable=False)
+    date_submitted = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+
+    rating = db.relationship("Rating")
 
 
 ###########################################################

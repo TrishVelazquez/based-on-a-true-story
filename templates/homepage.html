@@ -4,5 +4,21 @@
 
 {% block content %}
 
+<h1> Based on a True Story </h1>
+
+{% if 'active_user' in session %}
+    <h3>Logout</h3>
+    <p><a href="/logout"> Click here to sign out. </a></p>
+
+{% else %}
+    <h3>Login</h3>
+    <p><a href="/login"> Click here to sign in. </a></p>
+
+{% endif %}
+
+<h4>Create an account. </h4>
+<p><a href="/create-account"> Click here to create an account. </a></p>
+
+
 
 {% endblock %}
