@@ -34,7 +34,7 @@ def load_users():
         db.session.add(user)
     db.session.commit()
 
-###########################################################
+
 
 def load_movies():
     """Load sample movies to movie table"""
@@ -54,7 +54,7 @@ def load_movies():
         db.session.add(movie)
     db.session.commit()
 
-###########################################################
+
 
 def load_truth():
     """Load sample truths to truth table"""
@@ -79,7 +79,7 @@ def load_truth():
         db.session.add(truth)
     db.session.commit()
 
-###########################################################
+
 
 def load_rating():
     """Load sample ratings to truth_ratings table"""
@@ -101,31 +101,44 @@ def load_rating():
 
         db.session.add(rating)
     db.session.commit()
+    
+
+###########################################################
+# To be implemented in phase two. 
+
+# def load_reply():
+#     """Load sample replies to truth_ratings table"""
+
+#     print("Replies")
+
+#     Reply.query.delete()
+
+#     for row in open("seed_data/u.reply"):
+
+#         row = row.rstrip()
+
+#         reply_id, truth_id, user_id, comment = row.split("|")
+
+#         reply = Rating(reply_id=reply_id,
+#                         truth_id=truth_id,
+#                         user_id=user_id,
+#                         comment=comment)
+
+#         db.session.add(reply)
+#     db.session.commit()
 
 ###########################################################
 
-def load_reply():
-    """Load sample replies to truth_ratings table"""
+if __name__ == "__main__":
+    connect_to_db(app)
 
-    print("Replies")
+    db.create_all()
 
-    Reply.query.delete()
-
-    for row in open("seed_data/u.reply"):
-
-        row = row.rstrip()
-
-        reply_id, truth_id, user_id, comment = row.split("|")
-
-        reply = Rating(reply_id=reply_id,
-                        truth_id=truth_id,
-                        user_id=user_id,
-                        comment=comment)
-
-        db.session.add(reply)
-    db.session.commit()
-
-###########################################################
+    load_users()
+    load_movies()
+    load_truth()
+    load_rating()
+    # load_reply()
 
 
 

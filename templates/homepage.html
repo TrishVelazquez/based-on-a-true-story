@@ -6,6 +6,15 @@
 
 <h1> Based on a True Story </h1>
 
+<form action="/search" method="GET">
+    Search for a true story. <br>
+    <input type="text" name="default search">
+
+    <input type="submit">
+
+</form>
+
+
 {% if 'active_user' in session %}
     <h3>Logout</h3>
     <p><a href="/logout"> Click here to sign out. </a></p>

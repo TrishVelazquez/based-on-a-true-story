@@ -25,7 +25,6 @@ def homepage():
 
     return render_template("homepage.html")
 
-###########################################################
 
 @app.route('/login')
 def login_route():
@@ -33,9 +32,8 @@ def login_route():
 
     return render_template("login_account.html")
 
-###########################################################
 
-@app.route('/login-verify')
+@app.route('/login-verify', methods =["POST"])
 def user_login():
     """Verify user exists in database"""
 
@@ -56,7 +54,6 @@ def user_login():
     flash(u"No account found for the entered email/password. Please try again.")
     return render_template("login_account.html")
 
-###########################################################
 
 @app.route('/create-account')
 def create_new_user():
@@ -64,7 +61,6 @@ def create_new_user():
 
     return render_template("create_account.html")
 
-###########################################################
 
 @app.route('/process-account', methods =["POST"])
 def process_new_user():
@@ -76,7 +72,7 @@ def process_new_user():
     user_info = User.query.filter_by(email=email).all()
 
     if user_info:
-        print("")
+        print("You already have an account! Please log in.")
 
     else:
         new_user = User(email=email, password=password)
@@ -84,6 +80,7 @@ def process_new_user():
         db.session.commit()
 
         return render_template("homepage.html")
+
 
 ###########################################################
 

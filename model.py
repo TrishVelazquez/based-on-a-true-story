@@ -1,7 +1,7 @@
 """Based On A True Story Model Database"""
 
-import datetime
 from flask_sqlalchemy import SQLAlchemy
+import datetime
 
 db = SQLAlchemy()
 
@@ -19,7 +19,6 @@ class User(db.Model):
                         autoincrement=True, 
                         primary_key=True)
     username = db.Column(db.String(30), unique=True, nullable=False)
-    name = db.Column(db.String(50), nullable=True, default='Anonymous')
     email = db.Column(db.String(100), nullable=False)
     password = db.Column(db.String(50), nullable=False)
 
@@ -51,7 +50,7 @@ class Truth(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     truth_title = db.Column(db.String(100), nullable=False)
     truth_submission = db.Column(db.String(500), nullable=False)
-    resource_submission = db.Column(db.String(500), nullable=True)
+    resource_submission = db.Column(db.String(500), nullable=True, default='N/A')
     date_submitted = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
     movie = db.relationship("Movie")
@@ -74,6 +73,8 @@ class Rating(db.Model):
 
     truth = db.relationship("Truth")
 
+###########################################################
+# To be implemented in phase two. 
 
 class Reply(db.Model):
     """Reply Class"""
@@ -98,7 +99,7 @@ class Reply(db.Model):
 def connect_to_db(app):
     """Connect the database to Flask app"""
 
-    app.config['SQLAlchemy_DATABASE_URI'] = 'postgresql:///true_story'
+    app.config['SQLAlchemy_DATABASE_URI'] = 'postgresql:///truestory'
     app.config['SQLAlchemy_TRACK_MODIFICATIONS'] = False
     db.app = app
     db.init_app(app)
@@ -108,6 +109,6 @@ if __name__ == "__main__":
 
     from server import app
     connect_to_db(app)
-    print("Connected to DB!")
+    print("Connected to DB")
 
 
