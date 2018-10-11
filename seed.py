@@ -23,11 +23,10 @@ def load_users():
 
         row = row.rstrip()
 
-        user_id, username, name, email, password = row.split("|")
+        user_id, username, email, password = row.split("|")
 
         user = User(user_id=user_id,
                     username=username,
-                    name=name,
                     email=email,
                     password=password)
 
@@ -47,6 +46,7 @@ def load_movies():
 
         movie = Movie(title=movie.title,
                     genre=movie.genre,
+                    release_year=movie.year,
                     plot=movie.plot,
                     poster=movie.poster,
                     website_url=movie.website)
@@ -128,6 +128,21 @@ def load_rating():
 #     db.session.commit()
 
 ###########################################################
+# Helper Functions
+###########################################################
+
+
+def set_val_user_id():
+    """Set value for the next user_id after seeding the database"""
+
+    result = db.session.query(func.max(User.user_id)).one()
+    max_id = int(result[0])
+
+    query = "SELECT setval('users_user_id_seq', :new_id)"
+    db.session.execute(query, {'new_id: max_id + 1'})
+    db.session.commit()
+
+
 
 if __name__ == "__main__":
     connect_to_db(app)

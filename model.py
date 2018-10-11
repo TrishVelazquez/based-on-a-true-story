@@ -33,6 +33,7 @@ class Movie(db.Model):
                         primary_key=True)
     title = db.Column(db.String(200), nullable=False)
     genre = db.Column(db.String(500), nullable=False)
+    release_year = db.Column(db.Integer, nullable=True)
     plot = db.Column(db.String(500), nullable=False)
     poster = db.Column(db.String(500), nullable=False)
     website_url = db.Column(db.String(500), nullable=False)
@@ -53,9 +54,9 @@ class Truth(db.Model):
     resource_submission = db.Column(db.String(500), nullable=True, default='N/A')
     date_submitted = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
-    movie = db.relationship("Movie")
+    # movie = db.relationship("Movie")
 
-    user = db.relationship("User")
+    # user = db.relationship("User")
 
 
 class Rating(db.Model):
@@ -71,7 +72,7 @@ class Rating(db.Model):
     rating = db.Column(db.Integer, nullable=False)
     date_submitted = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
-    truth = db.relationship("Truth")
+    # truth = db.relationship("Truth")
 
 ###########################################################
 # To be implemented in phase two. 
@@ -89,26 +90,35 @@ class Reply(db.Model):
     comment = db.Column(db.String(300), nullable=False)
     date_submitted = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
-    rating = db.relationship("Rating")
+    # rating = db.relationship("Rating")
 
 
 ###########################################################
 # Helper Functions #
 ###########################################################
 
+
+def init_app():
+    """Create a Flask app"""
+    from flask import Flask
+    app = Flask(__name__)
+
+    connect_to_db(app)
+    print("Connected to Database.")
+
+
 def connect_to_db(app):
     """Connect the database to Flask app"""
 
-    app.config['SQLAlchemy_DATABASE_URI'] = 'postgresql:///truestory'
-    app.config['SQLAlchemy_TRACK_MODIFICATIONS'] = False
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///truestory'
+    app.config['SQLALCHEMY_ECHO'] = False
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.app = app
     db.init_app(app)
 
 
 if __name__ == "__main__":
 
-    from server import app
-    connect_to_db(app)
-    print("Connected to DB")
+    init_app()
 
 
