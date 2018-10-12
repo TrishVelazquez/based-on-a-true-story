@@ -8,14 +8,14 @@ import os
 import requests
 
 from jinja2 import StrictUndefined
-from flask import (Flask, render_template, redirect, request, flash, session)
+from flask import Flask, render_template, redirect, request, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
 from model import User, Movie, Truth, Rating, Reply, connect_to_db, db 
 
 
 app = Flask(__name__)
 
-app.secret_key = "SECRET"
+app.secret_key = os.environ["SECRET_KEY"]
 
 app.jinja_env.undefined = StrictUndefined
 
@@ -94,27 +94,61 @@ def find_movies():
 
     query = request.args.get('query')
 
-    if query:
+    url = 'http://www.omdbapi.com/'
 
-        url = 'http://www.omdbapi.com/?t'
-        payload = {
-            'apikey' : os.environ["OMDB_KEY"],
-            't' : query
-        }
+    payload = {
+        'apikey' : os.environ["OMDB_KEY"],
+        't' : query
+    }
 
-        response = requests.get(url, params=payload)
+    response = requests.get(url, params=payload)
 
-        data = response.json()
-        poster = data['Poster']
-        # unsure of what data returns yet
+    data = response.json()
 
-        return render_template("search_results.html",
-                               data=pformat(data),
-                               poster=poster)
+    if data == {'Response': 'False', 'Error': 'Movie not found!'}:
+
+        flash(u"Oops, that's not a movie title. Please try again.")
+        return redirect("/")
 
     else:
-        flash(u"Please try again.")
-        return redirect("/")
+
+        return render_template("search_results.html",
+                                data=pformat(data),
+                                title = data['Title'],
+                                genre = data['Genre'],
+                                release_year = data['Released'],
+                                plot = data['Plot'],
+                                poster = data['Poster'],
+                                website_url = data['Website'])
+
+
+# @app.route('/add-new-movie', methods=["POST"])
+# def add_moive_to_database():
+
+#     title = 
+#     genre = 
+#     release_year = 
+#     plot = 
+#     poster = 
+#     website_url = 
+
+
+# @app.route('/add-new-movie-fact', methods=["POST"])
+# def add_movie_truths():
+
+    
+#     user = session["active_user"]
+#     title = request.form.get("title")
+#     submission = request.form.get("truth")
+#     resource = request.form.get("resource")
+
+#     new_truth = Truth(truth_title=title, truth_submission=truth, truth_resource=resource)
+#     db.session.add(new_truth)
+#     db.session.commit()
+
+#     return render_template("")
+
+
 
 
 ###########################################################

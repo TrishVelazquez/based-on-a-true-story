@@ -6,15 +6,84 @@
 
     <div class="row">
 
-        <h2> Matches to your search: </h2>
+        <h2> This movie matches your search: </h2>
 
         <ul class="search-result">
 
             <img src={{ poster }}>
 
-            {{ data }}
+            <h1>{{ title }}</h1>
+
+            {% if 'Biography' in genre %}
+            <h3>{{ genre }}</h3>
+            <h4>
+                
+                <li> Released: {{ release_year }}</li>
+                <li>Plot: {{ plot }} </li>
+                <li>Website: {{ website_url }}</li>
+            </h4>
+            <br>
 
 
+                {% if "active_user" in session %}
+
+
+                    <form id="add-info" method="GET" action="/add-new-movie-fact">
+
+                        <h2>Yeah, that movie's based on a true story!</h2> 
+
+                        <h4>
+
+                        Title? <input type="text" name="title" required>
+                        <br>
+                        What's your truth? <input type="text" name="truth" required>
+                        <br>
+                        Any evidence to back that up (submit a resource/URL)?<input type="url" name="resource">
+                        <input type="submit">
+                        </h4>
+
+                        <input id="hidden-field" type="text" name="movie-title" value="{{ title }}" readonly>
+                        <br>
+                        <input id="hidden-field" type="text" name="genre" value="{{ genre }}" readonly>
+                        <br>
+                        <input id="hidden-field" type="text" name="release-year" value="{{ release_year }}" readonly>
+                        <br>
+                        <input id="hidden-field" type="text" name="plot" value="{{ plot }}" readonly>
+                        <br>
+                        <input id="hidden-field" type="text" name="poster" value="{{ poster }}" readonly>
+                        <br>
+                        <input id="hidden-field" type="text" name="website" value="{{ website_url }}" readonly>
+                        <br>
+
+                    </form>
+
+                {% else %}
+
+                    <h2>Yeah, that movie's based on a true story!</h2> 
+                    <h4><p><a id="movie-search-login" href="/login">Please log in to submit a truth. </a></p></h4>
+
+                {% endif %}
+
+            {% else %}
+
+                <h2>
+                Hmmmm. That movie isn't based on a true story.
+                <br>
+                Want to search again?
+                <br>
+                </h2>
+
+                <form id="search-again-search" method="GET" action="/search-results">
+
+                    Search for a movie that's based on true story. 
+                    <br>
+                    <input type="text" name="query">
+                    <input type="submit">
+
+                </form>
+
+
+            {% endif %}
 
 
 {% endblock %}

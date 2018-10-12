@@ -3,4 +3,5 @@ env/
 .DS_Store
 __pycache__
 secrets.sh
+__pycache__/model.cpython-36.pyc
 

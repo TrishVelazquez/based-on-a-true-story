@@ -1,16 +1,17 @@
 {% extends 'base.html' %}
 
-{% block title %} TITLE STUFFS {% endblock %}
+{% block title %} Hey you {% endblock %}
 
 {% block content %}
 
 <h1> Based on a True Story </h1>
 
 
-<form method="GET" action="/search-results">
-    Search for a movie that's based on true story. <br>
-    <input type="text" name="query">
+<form id="homepage-search" method="GET" action="/search-results">
 
+    Search for a movie that's based on true story. 
+    <br>
+    <input type="text" name="query">
     <input type="submit">
 
 </form>
@@ -26,7 +27,7 @@
 
 {% endif %}
 
-<h4>Create an account. </h4>
+<h3>Create an account. </h3>
 <p><a href="/create-account"> Click here to create an account. </a></p>
 
 
