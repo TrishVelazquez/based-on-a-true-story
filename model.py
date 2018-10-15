@@ -31,12 +31,12 @@ class Movie(db.Model):
     movie_id = db.Column(db.Integer, 
                         autoincrement=True, 
                         primary_key=True)
-    title = db.Column(db.String(200), nullable=False)
-    genre = db.Column(db.String(500), nullable=False)
-    release_year = db.Column(db.Integer, nullable=True)
-    plot = db.Column(db.String(500), nullable=False)
-    poster = db.Column(db.String(500), nullable=False)
-    website_url = db.Column(db.String(500), nullable=False)
+    title = db.Column(db.String(600), nullable=False)
+    genre = db.Column(db.String(600), nullable=False)
+    year = db.Column(db.Integer, nullable=True)
+    plot = db.Column(db.String(600), nullable=False)
+    poster = db.Column(db.String(600), nullable=False)
+    website_url = db.Column(db.String(600), nullable=False)
 
 
 class Truth(db.Model):
@@ -50,8 +50,8 @@ class Truth(db.Model):
     movie_id = db.Column(db.Integer, db.ForeignKey('movies.movie_id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     truth_title = db.Column(db.String(100), nullable=False)
-    truth_submission = db.Column(db.String(500), nullable=False)
-    resource_submission = db.Column(db.String(500), nullable=True, default='N/A')
+    truth_submission = db.Column(db.String(600), nullable=False)
+    resource_submission = db.Column(db.String(600), nullable=True, default='N/A')
     date_submitted = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
     # movie = db.relationship("Movie")

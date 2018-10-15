@@ -44,12 +44,15 @@ def load_movies():
 
     for movie in open("seed_data/u.movie"):
 
-        movie = Movie(title=movie.title,
-                    genre=movie.genre,
-                    release_year=movie.year,
-                    plot=movie.plot,
-                    poster=movie.poster,
-                    website_url=movie.website)
+        movie = movie.rstrip()
+
+        title, genre, plot, poster, website_url = movie.split("|")
+
+        movie = Movie(title=title,
+                    genre=genre,
+                    plot=plot,
+                    poster=poster,
+                    website_url=website_url)
 
         db.session.add(movie)
     db.session.commit()

@@ -14,39 +14,43 @@
 
             <h1>{{ title }}</h1>
 
+
             {% if 'Biography' in genre %}
-            <h3>{{ genre }}</h3>
-            <h4>
-                
-                <li> Released: {{ release_year }}</li>
-                <li>Plot: {{ plot }} </li>
-                <li>Website: {{ website_url }}</li>
-            </h4>
-            <br>
+
+
+                <h3>{{ genre }}</h3>
+                <h4>
+                    
+                    <li> Released: {{ year }}</li>
+                    <li>Plot: {{ plot }} </li>
+                    <li>Website: {{ website_url }}</li>
+                </h4>
+                <br>
 
 
                 {% if "active_user" in session %}
 
 
-                    <form id="add-info" method="GET" action="/add-new-movie-fact">
+                    <form id="add-info" method="POST" action="/add-new-movie">
 
                         <h2>Yeah, that movie's based on a true story!</h2> 
 
                         <h4>
 
-                        Title? <input type="text" name="title" required>
-                        <br>
-                        What's your truth? <input type="text" name="truth" required>
-                        <br>
-                        Any evidence to back that up (submit a resource/URL)?<input type="url" name="resource">
+
+                        Would you like to add a Truth for this movie? 
+                        <input type="radio" value="yes">Yes!
                         <input type="submit">
-                        </h4>
+                        <br>
+                        <input type="radio" value="no">No, I want to search again.
+                        <input type="submit">
+
 
                         <input id="hidden-field" type="text" name="movie-title" value="{{ title }}" readonly>
                         <br>
                         <input id="hidden-field" type="text" name="genre" value="{{ genre }}" readonly>
                         <br>
-                        <input id="hidden-field" type="text" name="release-year" value="{{ release_year }}" readonly>
+                        <input id="hidden-field" type="text" name="release-year" value="{{ year }}" readonly>
                         <br>
                         <input id="hidden-field" type="text" name="plot" value="{{ plot }}" readonly>
                         <br>
@@ -60,7 +64,7 @@
                 {% else %}
 
                     <h2>Yeah, that movie's based on a true story!</h2> 
-                    <h4><p><a id="movie-search-login" href="/login">Please log in to submit a truth. </a></p></h4>
+                    <h4><p><a id="movie-search-login" href="/login">Please log in to submit a Truth. </a></p></h4>
 
                 {% endif %}
 
