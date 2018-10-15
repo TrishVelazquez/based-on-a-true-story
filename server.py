@@ -12,6 +12,8 @@ from flask import Flask, render_template, redirect, request, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
 from model import User, Movie, Truth, Rating, Reply, connect_to_db, db 
 
+from ast import literal_eval as make_tuple
+
 
 app = Flask(__name__)
 
@@ -102,11 +104,153 @@ def process_new_user():
 
 
 
+# @app.route('/search-results')
+# def find_movies():
+#     """Search for movies through oMDB API"""
+
+#     query = request.args.get('query')
+#     url = 'http://www.omdbapi.com/'
+#     payload = {
+#         'apikey' : os.environ["OMDB_KEY"],
+#         't' : query
+#     }
+
+#     response = requests.get(url, params=payload)
+#     data = response.json()
+
+#     if data == {'Response': 'False', 'Error': 'Movie not found!'}:
+
+#         flash(u"Oops, that's not a movie title. Please try again.")
+#         return redirect("/")
+
+#     elif "Biography" in data['Genre']:
+
+#         movies_in_database = db.session.query(Movie.title).all()
+#         print('\n\n\n')
+#         print(len(movies_in_database))
+
+#         for each_title in movies_in_database:
+#             if data['Title'] not in each_title:
+#                 print(data['Title'])
+#                 print(each_title)
+#                 print("Nothing yet \n\n")
+#                 continue
+
+
+
+#         # i = 0
+
+#         # while i < len(movies_in_database):
+#         #     if data['Title'] not in movies_in_database[i]:
+#         #         print(data['Title']) 
+#         #         print(movies_in_database[i])
+#         #         print("Nothing yet. \n\n\n")
+#         #         i += 1
+
+
+#         #         # return render_template("search_results.html", data=pformat(data),
+#         #         #                 title = data['Title'],
+#         #         #                 year = data['Year'],
+#         #         #                 genre = data['Genre'],
+#         #         #                 plot = data['Plot'],
+#         #         #                 poster = data['Poster'],
+#         #         #                 website_url = data['Website'])
+
+
+#         #     elif break:
+
+
+#         #         new_movie= Movie(title=data['Title'],
+#         #                         genre=data['Genre'],
+#         #                         year=data['Year'],
+#         #                         plot=data['Plot'],
+#         #                         poster=data['Poster'],
+#         #                         website_url=data['Website'])
+
+#         #         db.session.add(new_movie)
+#         #         db.session.commit()
+
+#             elif data['Title'] not in movies_in_database:
+
+#                 new_movie= Movie(title=data['Title'],
+#                                     genre=data['Genre'],
+#                                     year=data['Year'],
+#                                     plot=data['Plot'],
+#                                     poster=data['Poster'],
+#                                     website_url=data['Website'])
+
+#                 db.session.add(new_movie)
+#                 db.session.commit()
+
+#                 print("Found it.")
+
+#                 flash(u"Movie added to database YAY")
+#                 return render_template("search_results.html", data=pformat(data),
+#                                 title = data['Title'],
+#                                 year = data['Year'],
+#                                 genre = data['Genre'],
+#                                 plot = data['Plot'],
+#                                 poster = data['Poster'],
+#                                 website_url = data['Website'])
+
+
+
+#             # else:
+#             #     print("Found it! \n\n\n")
+#             #     return render_template("search_results.html", data=pformat(data),
+#             #                     title = data['Title'],
+#             #                     year = data['Year'],
+#             #                     genre = data['Genre'],
+#             #                     plot = data['Plot'],
+#             #                     poster = data['Poster'],
+#             #                     website_url = data['Website'])
+
+#         # while check:
+
+#         # if data['Title'] != movies_in_database[index]:
+
+#         #     print(movies_in_database[index])
+#         #     index += 1
+
+
+
+
+
+#         #     # new_movie= Movie(title=data['Title'],
+#         #     #                 genre=data['Genre'],
+#         #     #                 year=data['Year'],
+#         #     #                 plot=data['Plot'],
+#         #     #                 poster=data['Poster'],
+#         #     #                 website_url=data['Website'])
+
+#         #     # db.session.add(new_movie)
+#         #     # db.session.commit()
+
+#         return render_template("search_results.html", data=pformat(data),
+#                                 title = data['Title'],
+#                                 year = data['Year'],
+#                                 genre = data['Genre'],
+#                                 plot = data['Plot'],
+#                                 poster = data['Poster'],
+#                                 website_url = data['Website'])
+
+
+#     else:
+#         return render_template("search_results.html",
+#                                 data=pformat(data),
+#                                 title = data['Title'],
+#                                 year = data['Year'],
+#                                 genre = data['Genre'],
+#                                 plot = data['Plot'],
+#                                 poster = data['Poster'],
+#                                 website_url = data['Website'])
+
+
+
+
 @app.route('/search-results')
 def find_movies():
     """Search for movies through oMDB API"""
-
-    movies_in_database = db.session.query(Movie.title).all()
 
     query = request.args.get('query')
     url = 'http://www.omdbapi.com/'
@@ -116,7 +260,6 @@ def find_movies():
     }
 
     response = requests.get(url, params=payload)
-
     data = response.json()
 
     if data == {'Response': 'False', 'Error': 'Movie not found!'}:
@@ -125,46 +268,62 @@ def find_movies():
         return redirect("/")
 
     elif "Biography" in data['Genre']:
-        for each_movie in movies_in_database:
-            if data['Title'] != ''.join(each_movie): 
-                print(data['Title'])
-                print(''.join(each_movie))
-                print("\n\n\n\n")
+        movie_title = Movie.query.filter_by(title=data['Title']).all()
+        if movie_title:
+            print("The movie is here! \n\n\n")
 
-                # Currently adding too many to database. Will fix. 
+            return render_template("search_results.html",
+                                    data=pformat(data),
+                                    title = data['Title'],
+                                    year = data['Year'],
+                                    genre = data['Genre'],
+                                    plot = data['Plot'],
+                                    poster = data['Poster'],
+                                    website_url = data['Website'])
 
-                new_movie= Movie(title=data['Title'],
-                                genre=data['Genre'],
-                                year=data['Year'],
-                                plot=data['Plot'],
-                                poster=data['Poster'],
-                                website_url=data['Website'])
+        else:
 
-        db.session.add(new_movie)
-        db.session.commit()
-        
-        return render_template("search_results.html",
-                                data=pformat(data),
-                                title = data['Title'],
-                                year = data['Year'],
-                                genre = data['Genre'],
-                                plot = data['Plot'],
-                                poster = data['Poster'],
-                                website_url = data['Website'])
+            print("I'm adding the movie! \n\n\n")
 
+            new_movie= Movie(title=data['Title'],
+                            genre=data['Genre'],
+                            year=data['Year'],
+                            plot=data['Plot'],
+                            poster=data['Poster'],
+                            website_url=data['Website'])
+
+            db.session.add(new_movie)
+            db.session.commit()
+
+            return render_template("search_results.html",
+                                    data=pformat(data),
+                                    title = data['Title'],
+                                    year = data['Year'],
+                                    genre = data['Genre'],
+                                    plot = data['Plot'],
+                                    poster = data['Poster'],
+                                    website_url = data['Website'])
     else:
 
         return render_template("search_results.html",
-                                data=pformat(data),
-                                title = data['Title'],
-                                year = data['Year'],
-                                genre = data['Genre'],
-                                plot = data['Plot'],
-                                poster = data['Poster'],
-                                website_url = data['Website'])
+                                    data=pformat(data),
+                                    title = data['Title'],
+                                    year = data['Year'],
+                                    genre = data['Genre'],
+                                    plot = data['Plot'],
+                                    poster = data['Poster'],
+                                    website_url = data['Website'])
 
 
 
+
+
+
+
+
+
+
+# if data['Title'] != ''.join(each_movie): 
 
 # @app.route('/add-new-movie', methods=["POST"])
 # def add_movie_to_database():
