@@ -49,6 +49,7 @@ class Truth(db.Model):
                         primary_key=True)
     movie_id = db.Column(db.Integer, db.ForeignKey('movies.movie_id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    username = db.Column(db.String(30), db.ForeignKey('users.username'), nullable=False)
     truth_title = db.Column(db.String(100), nullable=False)
     truth_submission = db.Column(db.String(600), nullable=False)
     resource_submission = db.Column(db.String(600), nullable=True, default='N/A')
@@ -69,6 +70,7 @@ class Rating(db.Model):
                         primary_key=True)
     truth_id = db.Column(db.Integer, db.ForeignKey('truths.truth_id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    username = db.Column(db.String(30), db.ForeignKey('users.username'), nullable=False)
     rating = db.Column(db.Integer, nullable=False)
     date_submitted = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
@@ -87,6 +89,7 @@ class Reply(db.Model):
                         primary_key=True)
     truth_id = db.Column(db.Integer, db.ForeignKey('truths.truth_id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    username = db.Column(db.String(30), db.ForeignKey('users.username'), nullable=False)
     comment = db.Column(db.String(300), nullable=False)
     date_submitted = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 

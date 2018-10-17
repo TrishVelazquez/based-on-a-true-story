@@ -1,8 +1,105 @@
 {% extends 'base.html' %}
 
-{% block title %} Movie Truths {% endblock %}
+{% block title %} {{ movie.title }} {% endblock %}
 
 {% block content %}
+
+<p><img src={{ movie.poster }}>
+<p>Release Year: {{ movie.year }}
+<br>
+<p>Plot: {{ movie.plot }}
+<br>
+<a href="{{ movie.website_url }}">{{ movie.website_url }}</a>
+
+{% if movie_truths %}
+
+    See some Truth discussion:
+
+    {% for truth in movie_truths %} 
+
+        <ul>
+            <br>
+            <br>
+            <h4><li>{{ truth.truth_title }}</h4>
+            Submitted by <li>{{ truth.username }}
+
+            <li>{{ truth.truth_submission }}
+            <br>
+    
+            Resource: <li><a href="{{ truth.resource_submission}}">{{ truth.resource_submission}}</a>
+
+            <li>{{ truth.date_submitted }}
+            <br>
+            <br>
+
+
+        </ul>
+
+    {% endfor %}
+
+        {% if "active_user" in session %}
+
+            <br>
+
+                <form action="/movies/{{ movie.movie_id }}" method="POST">
+                    <label>Add your Truth:</label>
+                        <br>
+                        Title your Truth: <input type="text" name="title" required>
+                        <br>
+                        What's your Truth? <input type="text" name="truth" required>
+                        <br>
+                        Got any proof? <input type="url" name="resource">
+                        <input type="submit" value="Add my truth!">
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                </form>
+
+                {% else %}
+                    <h4><a href="/login">Please log in to submit a Truth. </a></h4>
+                {% endif %}
+
+
+
+
+{% else %}
+    
+     {% if "active_user" in session %}
+
+    <br>
+    <p>Boo! There are no truths here yet. Want to be the first? 
+
+        <form action="/movies/{{ movie.movie_id }}" method="POST">
+            <label>Add your Truth:</label>
+                <br>
+                Title your Truth: <input type="text" name="title" required>
+                <br>
+                What's your Truth? <input type="text" name="truth" required>
+                <br>
+                Got any proof? <input type="url" name="resource">
+                <input type="submit" value="Add my truth!">
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+        </form>
+
+        {% else %}
+
+        <br>
+        <br>
+        <p>Boo! There are no truths here yet.
+
+        <h4><p><a id="movie-search-login" href="/login">Please log in to submit a Truth. </a></p></h4>
+
+        {% endif %}
+
+{% endif %}
 
 
 {% endblock %}

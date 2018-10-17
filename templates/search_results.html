@@ -4,69 +4,43 @@
 
 {% block content %}
 
-    <div class="row">
 
         <h2> This movie matches your search: </h2>
 
         <ul class="search-result">
 
             <img src={{ poster }}>
-
             <h1>{{ title }}</h1>
 
 
-            {% if 'Biography' in genre %}
+            {% if 'Biography' in genre or 'History' in genre %}
 
-
-                <h3>{{ genre }}</h3>
                 <h4>
                     
-                    <li> Released: {{ year }}</li>
+                    <li> Release Year: {{ year }}</li>
                     <li>Plot: {{ plot }} </li>
-                    <li>Website: {{ website_url }}</li>
                 </h4>
                 <br>
 
 
-                {% if "active_user" in session %}
+                <h2>Yeah, that movie's based on a true story!</h2> 
+                {% for movie in movies %}
+                    {% if movie.title == title %}
+                <a href="/movies/{{movie.movie_id}}">Click here to see the discussion.</a>
+                <br>
+                <br>
 
-
-                    <form id="add-info" method="POST" action="/add-new-movie">
-
-                        <h2>Yeah, that movie's based on a true story!</h2> 
-
-                        <h4>
-
-
-                        Would you like to add a Truth for this movie? 
-                        <input type="radio" value="yes">Yes!
-                        <input type="submit">
-                        <br>
-                        <input type="radio" value="no">No, I want to search again.
-                        <input type="submit">
-
-
-                        <input id="hidden-field" type="text" name="movie-title" value="{{ title }}" readonly>
-                        <br>
-                        <input id="hidden-field" type="text" name="genre" value="{{ genre }}" readonly>
-                        <br>
-                        <input id="hidden-field" type="text" name="release-year" value="{{ year }}" readonly>
-                        <br>
-                        <input id="hidden-field" type="text" name="plot" value="{{ plot }}" readonly>
-                        <br>
-                        <input id="hidden-field" type="text" name="poster" value="{{ poster }}" readonly>
-                        <br>
-                        <input id="hidden-field" type="text" name="website" value="{{ website_url }}" readonly>
-                        <br>
-
-                    </form>
-
-                {% else %}
-
-                    <h2>Yeah, that movie's based on a true story!</h2> 
-                    <h4><p><a id="movie-search-login" href="/login">Please log in to submit a Truth. </a></p></h4>
+                Want to search again?
+                <br>
+                <form method="GET" action="/search-results">
+                    <input type="text" name="query">
+                    <input type="submit">
+                </form>
 
                 {% endif %}
+                {% endfor %}
+
+
 
             {% else %}
 
