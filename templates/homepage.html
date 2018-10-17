@@ -6,33 +6,30 @@
 
 <h1> Based on a True Story </h1>
 
+    <form id="homepage-search" method="GET" action="/search-results">
 
-<form id="homepage-search" method="GET" action="/search-results">
+        Search for a movie that's based on true story. 
+        <br>
+        <input type="text" name="query" required>
+        <input type="submit">
 
-    Search for a movie that's based on true story. 
-    <br>
-    <input type="text" name="query">
-    <input type="submit">
+    </form>
 
-</form>
+<h2><a href="/movie-list">Browse movies with truths</a></h2>
 
-<h2><p><a href="/movie-list"> Browse movies with truths </a></p></h2>
+    {% if 'active_user' in session %}
 
-{% if 'active_user' in session %}
-    <h3>Logout</h3>
-    <p><a href="/logout"> Click here to sign out. </a></p>
+        <h3>Logout</h3>
+        <a href="/logout">Click here to sign out.</a>
 
-{% else %}
-    <h3>Login</h3>
-    <p><a href="/login"> Click here to sign in. </a></p>
+    {% else %}
 
-    <h3>Create an account. </h3>
-    <p><a href="/create-account"> Click here to create an account. </a></p>
+        <h3>Login</h3>
+        <a href="/login"> Click here to sign in. </a>
 
+        <h3>Create an account.</h3>
+        <a href="/create-account">Click here to create an account.</a>
 
-
-{% endif %}
-
-
+    {% endif %}
 
 {% endblock %}

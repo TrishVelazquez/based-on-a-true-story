@@ -4,18 +4,16 @@
 
 {% block content %}
 
-    <h1> Create An Account </h1>
+    <h1> You belong here. </h1>
 
-    <form action="/process-account" method="POST">
+    <form id="create-account-form" action="/process-account" method="POST">
 
-        Username: <input type="text" name="username">
-        Email: <input type="text" name="email">
-        Password: <input type="password" name="password">
+        Username: <input type="text" name="username" required>
+        Email: <input type="email" name="email" required>
+        Password: <input type="password" name="password" required>
         
-
         <input type="submit">
 
     </form>
-
 
 {% endblock %}

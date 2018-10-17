@@ -7,61 +7,61 @@
 
         <h2> This movie matches your search: </h2>
 
-        <ul class="search-result">
+        <ul id="search-result">
 
             <img src={{ poster }}>
             <h1>{{ title }}</h1>
 
-
             {% if 'Biography' in genre or 'History' in genre %}
 
-                <h4>
-                    
-                    <li> Release Year: {{ year }}</li>
-                    <li>Plot: {{ plot }} </li>
-                </h4>
-                <br>
+                    <h4>
+                        <li> Release Year: {{ year }}</li>
+                        <li>Plot: {{ plot }} </li>
+                    </h4>
+                    <br>
 
 
-                <h2>Yeah, that movie's based on a true story!</h2> 
-                {% for movie in movies %}
-                    {% if movie.title == title %}
-                <a href="/movies/{{movie.movie_id}}">Click here to see the discussion.</a>
-                <br>
-                <br>
+                    <h2>Yeah, that movie's based on a true story!</h2> 
 
-                Want to search again?
-                <br>
-                <form method="GET" action="/search-results">
-                    <input type="text" name="query">
-                    <input type="submit">
-                </form>
+                    {% for movie in movies %}
 
-                {% endif %}
-                {% endfor %}
+                        {% if movie.title == title %}
 
+                        <a href="/movies/{{movie.movie_id}}">Click here to see the discussion.</a>
+                        <br>
+                        <br>
 
+                        Not the movie you were looking for? Search again.
+                        <br>
+                        <form method="GET" action="/search-results">
+
+                            <input type="text" name="query" required>
+                            <input type="submit">
+
+                        </form>
+
+                        {% endif %}
+
+                    {% endfor %}
 
             {% else %}
 
-                <h2>
-                Hmmmm. That movie isn't based on a true story.
-                <br>
-                Want to search again?
-                <br>
-                </h2>
-
-                <form id="search-again-search" method="GET" action="/search-results">
-
-                    Search for a movie that's based on true story. 
+                    <h2>
+                    Hmmmm. That movie isn't based on a true story.
                     <br>
-                    <input type="text" name="query">
-                    <input type="submit">
+                    Want to search again?
+                    <br>
+                    </h2>
 
-                </form>
+                    <form id="search-again-search" method="GET" action="/search-results">
 
+                        Search for a movie that's based on true story. 
+                        <br>
+                        <input type="text" name="query" required>
+                        <input type="submit">
+
+                    </form>
 
             {% endif %}
-
 
 {% endblock %}

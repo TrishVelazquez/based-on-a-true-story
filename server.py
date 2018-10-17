@@ -1,7 +1,7 @@
 
-###########################################################
+################################################################
 # Based On A True Story Server #
-###########################################################
+################################################################
 
 from pprint import pformat
 import os
@@ -12,7 +12,6 @@ from flask import Flask, render_template, redirect, request, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
 from model import User, Movie, Truth, Rating, Reply, connect_to_db, db 
 
-
 app = Flask(__name__)
 
 app.secret_key = os.environ["SECRET_KEY"]
@@ -20,16 +19,60 @@ app.secret_key = os.environ["SECRET_KEY"]
 app.jinja_env.undefined = StrictUndefined
 
 
-###########################################################
+################################################################
 # Routes #
-###########################################################
+################################################################
 
 @app.route('/')
 def homepage():
-    """Take user to the homepage"""
+    """Take the user to the homepage"""
 
     return render_template("homepage.html")
 
+
+################################################################
+
+@app.route('/create-account')
+def create_new_user():
+    """Create a new account for a user"""
+
+    return render_template("create_account.html")
+
+
+################################################################
+
+@app.route('/process-account', methods =["POST"])
+def process_new_user():
+    """Process a new account"""
+
+    username = request.form.get("username")
+    email = request.form.get("email")
+    password = request.form.get("password")
+
+    registered_email = User.query.filter_by(email=email).all()
+    registered_username = User.query.filter_by(username=username).all()
+
+    if registered_email:
+        flash(u"You already have an account! Please log in.")
+        return redirect("/login")
+
+    if registered_username:
+        flash(u"That username is taken! Please try another.")
+        return redirect("/create-account")
+
+    else:
+        new_user = User(username=username, 
+                        email=email, 
+                        password=password)
+
+        db.session.add(new_user)
+        db.session.commit()
+
+        flash(u"Your account has been created! Please log in.")
+        return redirect("/login")
+
+
+################################################################
 
 @app.route('/login')
 def login_route():
@@ -38,30 +81,32 @@ def login_route():
     return render_template("login_account.html")
 
 
+################################################################
+
 @app.route('/login-verify', methods =["POST"])
 def user_login():
     """Verify user exists in database"""
 
-    email = request.form.get('user_email')
-    password = request.form.get('user_password')
+    email = request.form.get('email')
+    password = request.form.get('password')
 
-    user_info = db.session.query(User.username, User.email, User.password, User.user_id).all()
+    all_users = User.query.order_by('user_id').all()
 
-    for user in user_info:
-        if user[1] == email and user[2] == password:
-            
-            flash(u"Logged in. Welcome back, " + user[0])
-            session["active_user"] = user[0]
-            session["active_user_id"] = user[3]
+    for user in all_users:
+
+        if user.email == email and user.password == password:
+
+            flash(u"Logged in. Welcome back, " + user.username)
+            session["active_user"] = user.username
+            session["active_user_id"] = user.user_id
 
             return redirect("/")
 
-        else:
-            continue 
-
-    flash(u"No account found for the entered email/password. Please try again.")
+    flash(u"Incorrect email and/or password. Please try again.")
     return render_template("login_account.html")
 
+
+################################################################
 
 @app.route('/logout')
 def logout():
@@ -70,38 +115,11 @@ def logout():
     del session["active_user"]
     del session["active_user_id"]
 
-    flash(u"You've been logged out.")
+    flash(u"You've been logged out. We'll miss you.")
     return redirect("/")
 
 
-@app.route('/create-account')
-def create_new_user():
-    """Create a new user account"""
-
-    return render_template("create_account.html")
-
-
-@app.route('/process-account', methods =["POST"])
-def process_new_user():
-    """Process new user account"""
-
-    username = request.form.get("username")
-    email = request.form.get("email")
-    password = request.form.get("password")
-
-    user_info = User.query.filter_by(email=email).all()
-
-    if user_info:
-        flash(u"You already have an account! Please log in.")
-        return redirect("/login")
-
-    else:
-        new_user = User(username=username, email=email, password=password)
-        db.session.add(new_user)
-        db.session.commit()
-
-        return render_template("homepage.html")
-
+################################################################
 
 @app.route('/search-results')
 def find_and_add_movies():
@@ -112,28 +130,20 @@ def find_and_add_movies():
     payload = {
         'apikey' : os.environ["OMDB_KEY"],
         't' : query
-    }
-
-    """Query API with the results from the searchbar"""
+        }
 
     response = requests.get(url, params=payload)
     data = response.json()
-
-    """Save json response in data object"""
-
 
     if data == {'Response': 'False', 'Error': 'Movie not found!'}:
 
         flash(u"Oops, that's not a movie title. Please try again.")
         return redirect("/")
 
-
-    """If data response is an error (any incorrect search raises this error) redirect to homepage"""
-
     if "History" in data['Genre'] or "Biography" in data['Genre']:
         movie_title = Movie.query.filter_by(title=data['Title']).all()
+
         if not movie_title:
-        # print("I'm adding the movie to the database! \n")
 
             new_movie= Movie(title=data['Title'],
                             genre=data['Genre'],
@@ -145,12 +155,6 @@ def find_and_add_movies():
             db.session.add(new_movie)
             db.session.commit()
 
-
-    """If a movie that has the terms History or Biography 
-    in its genre is not in the database, add it"""
-
-
-    # print("Displaying stuff!\n")
     movies = Movie.query.order_by('title').all()
     return render_template("search_results.html",
                                 movies=movies,
@@ -162,6 +166,8 @@ def find_and_add_movies():
                                 website_url = data['Website'])
 
 
+################################################################
+
 @app.route("/movie-list")
 def show_movies_list():
     """Show all of the movies currently in the database"""
@@ -171,6 +177,7 @@ def show_movies_list():
                             movies=movies)
 
 
+################################################################
 
 @app.route("/movies/<int:movie_id>", methods=["GET"])
 def show_movie_info(movie_id):
@@ -178,19 +185,16 @@ def show_movie_info(movie_id):
     Show fields to add Truths for registered users."""
 
     movie = Movie.query.get(movie_id)
-
-    # user_id = session.get("active_user_id")
     users = User.query.order_by('user_id').all
-
     movie_truths = Truth.query.filter_by(movie_id=movie_id).all()
 
     return render_template("movie_info.html",
-                            # user_id=user_id,
                             users=users,
                             movie=movie,
                             movie_truths=movie_truths)
 
 
+################################################################
 
 @app.route("/movies/<int:movie_id>", methods=["POST"])
 def add_truth_to_movie(movie_id):
@@ -216,9 +220,9 @@ def add_truth_to_movie(movie_id):
     return redirect(f"/movies/{movie_id}")
 
 
+################################################################
 
-
-###########################################################
+################################################################
 
 if __name__ == "__main__":
 

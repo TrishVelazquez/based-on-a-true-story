@@ -6,11 +6,11 @@
 
 <h1> Welcome Back </h1>
 
-    <form action="/login-verify" method="POST">
+    <form id="login-verify-form" action="/login-verify" method="POST">
 
-        Email: <input type="text" name="user_email">
-        Password: <input type="password" name="user_password">
-
+        Email: <input type="email" name="email" required>
+        Password: <input type="password" name="password" required>
+        
         <input type="submit">
 
     </form>

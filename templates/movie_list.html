@@ -5,23 +5,14 @@
 {% block content %}
 
     {% for movie in movies %}
-    <ul>
 
-        <li>
-
+        <h3>
             <br>
-            <h3>{{ movie.title }} 
+            {{ movie.title }}
             <br>
-            <a href="/movies/{{ movie.movie_id }}"><img src={{ movie.poster }}></a>
-            <br>
-
-        </li>
-
-    </ul>
+            <a href="/movies/{{ movie.movie_id}}"><img src={{ movie.poster }}></a>
+        </h3>
 
     {% endfor %}
-
-
-
 
 {% endblock %}
