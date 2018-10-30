@@ -23,6 +23,7 @@ class User(db.Model):
     password = db.Column(db.String(50), nullable=False)
 
 
+
 class Movie(db.Model):
     """Movie class"""
 
@@ -37,6 +38,7 @@ class Movie(db.Model):
     plot = db.Column(db.String(600), nullable=False)
     poster = db.Column(db.String(600), nullable=False)
     website_url = db.Column(db.String(600), nullable=False)
+
 
 
 class Truth(db.Model):
@@ -55,9 +57,6 @@ class Truth(db.Model):
     resource_submission = db.Column(db.String(600), nullable=True, default='N/A')
     date_submitted = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
-    # movie = db.relationship("Movie")
-
-    # user = db.relationship("User")
 
 
 class Rating(db.Model):
@@ -74,7 +73,6 @@ class Rating(db.Model):
     rating = db.Column(db.Integer, nullable=False)
     date_submitted = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
-    # truth = db.relationship("Truth")
 
 ###########################################################
 # To be implemented in phase two. 
@@ -93,7 +91,67 @@ class Reply(db.Model):
     comment = db.Column(db.String(300), nullable=False)
     date_submitted = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
-    # rating = db.relationship("Rating")
+
+###########################################################
+# Example Data #
+###########################################################
+
+
+def example_data():
+    """Create sample data for tests"""
+
+    user1 = User(username="filmbuff",
+                email="films@yahoo.com",
+                password="films")
+
+    user2 = User(username="movies4ever",
+                email="123@gmail.com",
+                password="123")
+
+    movie1 = Movie(title="BlacKkKlansman",
+                genre="Biography, Comedy, Crime, Drama",
+                year="2018",
+                plot="Ron Stallworth, an African American police officer from Colorado Springs, CO, successfully manages to infiltrate the local Ku Klux Klan branch with the help of a Jewish surrogate who eventually becomes its leader. Based on actual events.",
+                poster="https://m.media-amazon.com/images/M/MV5BMjUyOTE1NjI0OF5BMl5BanBnXkFtZTgwMTM4ODQ5NTM@._V1_SX300.jpg",
+                website_url="N/A")
+
+    movie2 = Movie(title="127 Hours",
+                genre="Adventure, Biography, Drama",
+                year="2010",
+                plot="An adventurous mountain climber becomes trapped under a boulder while canyoneering alone near Moab, Utah and resorts to desperate measures in order to survive.",
+                poster="https://m.media-amazon.com/images/M/MV5BMTc2NjMzOTE3Ml5BMl5BanBnXkFtZTcwMDE0OTc5Mw@@._V1_SX300.jpg",
+                website_url="http://www.127hoursmovie.com/")
+
+    movie3 = Movie(title="Beetlejuice",
+                genre="Comedy, Fantasy",
+                year="1998",
+                plot="A recently-deceased husband and wife commission a bizarre demon to drive an obnoxious family out of their home.",
+                poster="https://m.media-amazon.com/images/M/MV5BZDdmNjBlYTctNWU0MC00ODQxLWEzNDQtZGY1NmRhYjNmNDczXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg",
+                website_url="N/A")
+
+    truth1 = Truth(movie_id=1,
+                user_id=1,
+                username="filmbuff",
+                truth_title="A Truth",
+                truth_submission="Something about this movie.",
+                resource_submission="www.this.com")
+
+    truth2 = Truth(movie_id=2,
+                user_id=2,
+                username="movies4ever",
+                truth_title="A Thing",
+                truth_submission="A fun fact for you.")
+
+
+    # import pdb
+    # pdb.set_trace()
+
+    db.session.add_all([user1, user2, movie1, movie2, movie3])
+    db.session.commit()
+
+    db.session.add_all([truth1, truth2])
+    db.session.commit()
+
 
 
 ###########################################################
@@ -110,10 +168,11 @@ def init_app():
     print("Connected to Database.")
 
 
-def connect_to_db(app):
+def connect_to_db(app, db_uri="postgresql:///testdb"):
     """Connect the database to Flask app"""
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///truestory'
+    # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///truestory'
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
     app.config['SQLALCHEMY_ECHO'] = False
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.app = app

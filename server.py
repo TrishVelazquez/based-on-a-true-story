@@ -14,6 +14,9 @@ from model import User, Movie, Truth, Rating, Reply, connect_to_db, db
 
 app = Flask(__name__)
 
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+
+
 app.secret_key = os.environ["SECRET_KEY"]
 
 app.jinja_env.undefined = StrictUndefined
@@ -53,7 +56,7 @@ def process_new_user():
     registered_username = User.query.filter_by(username=username).all()
 
     if registered_email:
-        flash(u"You already have an account! Please log in.")
+        flash(u"Your email is already registerd. Please log in.")
         return redirect("/login")
 
     if registered_username:
@@ -229,7 +232,7 @@ if __name__ == "__main__":
     app.debug = True
     app.jinja_env.auto_reload = app.debug
 
-    connect_to_db(app)
+    connect_to_db(app, db_uri="postgresql:///truestory")
 
     DebugToolbarExtension(app)
 

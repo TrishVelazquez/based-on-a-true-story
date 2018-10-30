@@ -2,30 +2,33 @@
 
 <html>
 
+
     <head>
+    <link rel="stylesheet" href="static/stylesheet.css">
 
-        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <link rel="stylesheet" href="static/stylesheet.css">
 
-        {% block title %} Based On A True Story {% endblock %}
+        
+        <title>Based on a true story</title>
 
             {% with messages = get_flashed_messages() %}
 
                 {% if messages %}
-                    <ul class=flashes>
-                        {% for message in messages %}
-                            <li>{{ message }}</li>
-                        {% endfor %}
-                    </ul>
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
                 {% endif %}
+
             {% endwith %}
+
     </head>
+
     <body>
 
-        <hr>
+        {% block content %} 
 
-        {% block content %} PUT STUFF HERE {% endblock %}
+
+
+        {% endblock %}
 
     </body>
 

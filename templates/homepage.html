@@ -4,22 +4,56 @@
 
 {% block content %}
 
-<h1> Based on a True Story </h1>
+<h1><div class="Homepage" id="homepage1"></div></h1>
+
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.js"></script>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.js"></script>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
+    <script crossorigin type="text/babel">
+
+function Homepage(props) {
+    return (
+    <p>{props.element}</p>
+    );
+}
+
+
+ReactDOM.render(
+    <Homepage element="Based on a True Story" />,
+    document.getElementById('homepage1')
+);
+
+ReactDOM.render(
+    <Homepage element="Search for a movie that's based on a true story." />,
+    document.getElementById('homepage2')
+);
+
+ReactDOM.render(
+    <Homepage element="Browse movies with Truths" />,
+    document.getElementById('homepage3')
+);
+
+ReactDOM.render(
+    <Homepage element="Logout" />,
+    document.getElementById('homepage4')
+);
+
+
+</script>
 
     <form id="homepage-search" method="GET" action="/search-results">
 
-        Search for a movie that's based on true story. 
-        <br>
+        <div class="Homepage" id="homepage2"></div>
         <input type="text" name="query" required>
         <input type="submit">
 
     </form>
 
-<h2><a href="/movie-list">Browse movies with truths</a></h2>
+<h2><a href="/movie-list"><div class="Homepage" id="homepage3"></div></a></h2>
 
     {% if 'active_user' in session %}
 
-        <h3>Logout</h3>
+        <h3><div class="Homepage" id="homepage4"></h3>
         <a href="/logout">Click here to sign out.</a>
 
     {% else %}
@@ -31,5 +65,9 @@
         <a href="/create-account">Click here to create an account.</a>
 
     {% endif %}
+
+
+
+
 
 {% endblock %}
