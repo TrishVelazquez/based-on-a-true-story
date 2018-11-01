@@ -58,6 +58,25 @@ class Truth(db.Model):
     date_submitted = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
 
+###########################################################
+# To be implemented in phase two. 
+
+class Reply(db.Model):
+    """Reply Class"""
+
+    __tablename__ = "replies"
+
+    reply_id = db.Column(db.Integer,
+                        autoincrement=True,
+                        primary_key=True)
+    truth_id = db.Column(db.Integer, db.ForeignKey('truths.truth_id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    username = db.Column(db.String(30), db.ForeignKey('users.username'), nullable=False)
+    movie_id = db.Column(db.Integer, db.ForeignKey('movies.movie_id'), nullable=False)
+    comment = db.Column(db.String(500), nullable=False)
+    date_submitted = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+
+
 
 class Rating(db.Model):
     """Truth Rating Class"""
@@ -73,23 +92,6 @@ class Rating(db.Model):
     rating = db.Column(db.Integer, nullable=False)
     date_submitted = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
-
-###########################################################
-# To be implemented in phase two. 
-
-class Reply(db.Model):
-    """Reply Class"""
-
-    __tablename__ = "replies"
-
-    reply_id = db.Column(db.Integer,
-                        autoincrement=True,
-                        primary_key=True)
-    truth_id = db.Column(db.Integer, db.ForeignKey('truths.truth_id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
-    username = db.Column(db.String(30), db.ForeignKey('users.username'), nullable=False)
-    comment = db.Column(db.String(300), nullable=False)
-    date_submitted = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
 
 ###########################################################
@@ -167,12 +169,13 @@ def init_app():
     connect_to_db(app)
     print("Connected to Database.")
 
-
+# def connect_to_db(app):
 def connect_to_db(app, db_uri="postgresql:///testdb"):
     """Connect the database to Flask app"""
 
     # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///truestory'
     app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
+    # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///truestory'
     app.config['SQLALCHEMY_ECHO'] = False
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.app = app

@@ -190,11 +190,13 @@ def show_movie_info(movie_id):
     movie = Movie.query.get(movie_id)
     users = User.query.order_by('user_id').all
     movie_truths = Truth.query.filter_by(movie_id=movie_id).all()
+    replies = Reply.query.filter_by(movie_id=movie_id).all()
 
-    return render_template("movie_info.html",
+    return render_template("message_board.html",
                             users=users,
                             movie=movie,
-                            movie_truths=movie_truths)
+                            movie_truths=movie_truths,
+                            replies=replies)
 
 
 ################################################################
@@ -221,6 +223,53 @@ def add_truth_to_movie(movie_id):
 
     flash(u"Your truth has been submitted!")
     return redirect(f"/movies/{movie_id}")
+
+
+################################################################
+
+@app.route("/add-reply", methods=["POST"])
+def add_reply_to_truth():
+    """Add replies to submitted truths"""
+
+    username = session.get("active_user")
+    user_id = session.get("active_user_id")
+    movie_id = request.form.get("movie_id")
+    truth_id = request.form.get("truth_id")
+    comment = request.form.get("comment")
+
+    new_reply = Reply(truth_id=truth_id,
+                    movie_id=movie_id,
+                    user_id=user_id,
+                    username=username,
+                    comment=comment)
+
+    db.session.add(new_reply)
+    db.session.commit()
+
+    flash(u"Posted!")
+    return redirect(f"/movies/{movie_id}")
+
+
+
+################################################################
+
+
+@app.route("/user/<int:user_id>")
+def user_details(user_id):
+    """Show info about the user and their activity"""
+    
+    user = User.query.get(user_id)
+    movies = Movie.query.all()
+    user_truths = Truth.query.filter_by(user_id=user_id).all()
+    user_replies = Reply.query.filter_by(user_id=user_id).all()
+
+
+    return render_template("user.html",
+                            movies=movies,
+                            user=user,
+                            user_truths=user_truths,
+                            user_replies=user_replies)
+
 
 
 ################################################################

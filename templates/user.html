@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %} 
+
+<h1>{{ user.username }}</h1>
+
+
+{% if user_truths %}
+
+<h2>Submitted Truths</h2>
+
+
+    {% for truth in user_truths %}
+
+       
+            {% for movie in movies %}
+                {% if movie.movie_id == truth.movie_id %}
+                    <br><a href="/movies/{{ truth.movie_id }}">{{ movie.title }}</a>
+                {% endif %}
+            {% endfor %}
+            
+        <br><h4>{{ truth.truth_title }}</h4>
+        {{ truth.truth_submission }}
+        <br>{{ truth.resource_submission }}
+        <h5>{{ truth.date_submitted }}</h5>
+        <br>
+
+    {% endfor %}
+
+{% else %}
+
+    Quietly lurking.
+    <br> For now.  
+
+{% endif %}
+
+
+{% if user_replies %}
+
+    <h2>Discussion</h2>
+
+    {% for reply in user_replies %}
+
+        {% for movie in movies %}
+        {% if movie.movie_id == reply.movie_id %}
+
+        <br><a href="/movies/{{ reply.movie_id }}"><br>{{ movie.title }}</a>
+
+        {% endif %}
+        {% endfor %}
+        <br>{{ reply.comment }}
+        <h5>{{ reply.date_submitted }}</h5>
+        
+
+    {% endfor %}
+
+{% else %}
+
+    <br>
+    <br> :)
+
+{% endif %}
+
+{% endblock %}
