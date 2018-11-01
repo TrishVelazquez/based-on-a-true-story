@@ -32,7 +32,7 @@
                 <h4>{{ truth.truth_title }}</h4>
                 Submitted By: <a href="/user/{{ truth.user_id}}">{{ truth.username }}</a>
 
-                {{ truth.truth_submission }}
+                <br>{{ truth.truth_submission }}
 
                 {% if truth.resource_submission %}
                     <h5>Resource: <a href="{{ truth.resource_submission }}">External URL</a></h5>
@@ -64,7 +64,7 @@
 
                     <h4>Re: {{ truth.truth_title }}</h4>
                     Submitted By: <a href="/user/{{ reply.user_id}}">{{ reply.username }}</a>
-                    {{ reply.comment }}
+                    <br>{{ reply.comment }}
                     <h5>{{ reply.date_submitted }}</h5>
 
                 </div>
