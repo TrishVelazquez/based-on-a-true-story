@@ -3,6 +3,7 @@
 
 {% block title %} {{ movie.title }} {% endblock %}
 
+<!-- Display for movie -->
 
 {% block content %}
 
@@ -19,7 +20,8 @@
 
     </div>
 
-    <!-- If statement to check if movie truths exist -->
+    <!-- If statement to check if movie Truths exist -->
+    <!-- If exist, display the submitted Truths -->
 
     {% if movie_truths %}
 
@@ -35,6 +37,7 @@
                 <br>{{ truth.truth_submission }}
 
                 {% if truth.resource_submission %}
+                
                     <h5>Resource: <a href="{{ truth.resource_submission }}">External URL</a></h5>
 
                 {% endif %}
@@ -42,6 +45,9 @@
                 <h5>{{ truth.date_submitted }}</h5>
 
             </div>
+
+            <!-- Reply field. Movie_id and _truth_id passed in sub rosa -->
+            <!-- Reply field will appear for every Truth -->
 
             <form action="/add-reply" method="POST">
                 <fieldset>
@@ -60,6 +66,8 @@
 
             {% if truth.truth_id == reply.truth_id %}
 
+            <!-- For each reply where the truth_id matches, display the replies -->
+
                 <div class="container darker">
 
                     <h4>Re: {{ truth.truth_title }}</h4>
@@ -68,6 +76,8 @@
                     <h5>{{ reply.date_submitted }}</h5>
 
                 </div>
+
+                <!-- Also display reply field for each other reply -->
 
                 <form action="/add-reply" method="POST">
                     <fieldset>
