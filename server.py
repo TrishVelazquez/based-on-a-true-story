@@ -149,11 +149,11 @@ def find_and_add_movies():
         if not movie_title:
 
             new_movie= Movie(title=data['Title'],
-                            genre=data['Genre'],
-                            year=data['Year'],
-                            plot=data['Plot'],
-                            poster=data['Poster'],
-                            website_url=data['Website'])
+                                genre=data['Genre'],
+                                year=data['Year'],
+                                plot=data['Plot'],
+                                poster=data['Poster'],
+                                website_url=data['Website'])
 
             db.session.add(new_movie)
             db.session.commit()
@@ -212,11 +212,11 @@ def add_truth_to_movie(movie_id):
     resource = request.form.get("resource")
 
     new_truth = Truth(movie_id=movie_id, 
-                    user_id=user_id,
-                    username=username, 
-                    truth_title=title, 
-                    truth_submission=truth, 
-                    resource_submission=resource)
+                        user_id=user_id,
+                        username=username, 
+                        truth_title=title, 
+                        truth_submission=truth, 
+                        resource_submission=resource)
 
     db.session.add(new_truth)
     db.session.commit()
@@ -238,10 +238,10 @@ def add_reply_to_truth():
     comment = request.form.get("comment")
 
     new_reply = Reply(truth_id=truth_id,
-                    movie_id=movie_id,
-                    user_id=user_id,
-                    username=username,
-                    comment=comment)
+                        movie_id=movie_id,
+                        user_id=user_id,
+                        username=username,
+                        comment=comment)
 
     db.session.add(new_reply)
     db.session.commit()
@@ -250,9 +250,7 @@ def add_reply_to_truth():
     return redirect(f"/movies/{movie_id}")
 
 
-
 ################################################################
-
 
 @app.route("/user/<int:user_id>")
 def user_details(user_id):
@@ -270,6 +268,22 @@ def user_details(user_id):
                             user_truths=user_truths,
                             user_replies=user_replies)
 
+
+################################################################
+
+@app.route("/process-vote")
+def process_vote():
+    """Processes an upvote or downvote to the database"""
+
+    new_vote = Rating(truth_id=truth_id,
+                        user_id=user_id,
+                        username=username,
+                        rating=rating)
+
+    db.session.add(new_vote)
+    db.session.commit()
+
+    return redirect(f"/movie/{movie.id}")
 
 
 ################################################################
