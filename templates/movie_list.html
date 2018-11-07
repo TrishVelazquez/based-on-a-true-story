@@ -1,19 +1,42 @@
 {% extends 'base.html' %}
 
-{% block title %} Movies {% endblock %}
-
 {% block content %}
-Movies people are talking about.
+<style>
+    body {
+        background-image: url(../static/img/tri.png);
+    }
+</style>
 
-    {% for movie in movies %}
+<div class="container" id="movie-list-container">
+<div class="header"><h1> Movies people are talking about.</h1>
+</div>
 
-        <h3>
-            <br>
-            {{ movie.title }}
-            <br>
-            <a href="/movies/{{ movie.movie_id}}"><img src={{ movie.poster }}></a>
-        </h3>
+<div class="row">
 
-    {% endfor %}
+{% for movie in movies %}
+
+<div class="col text-center" id="movie-display"> 
+
+    
+    <a href="/movies/{{ movie.movie_id}}"><img src={{ movie.poster }}></a>
+    <div class="text-center"><h3>{{ movie.title }}</h3></div>
+
+</div>
+
+{% endfor %}
+</div>
+</div>
+<br>
+<div class="row text-center">
+    <div class="col">
+        <form id="homepage-search" method="GET" action="/search-results">
+            <p>Don't see what you're looking for?</p>
+            <input type="text" name="query" placeholder=" Search for a movie" required>
+            <input type="submit" class="btn btn-info btn-m">
+        </form>
+    </div>
+</div>
+<br>
+
 
 {% endblock %}

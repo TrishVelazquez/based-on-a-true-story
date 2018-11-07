@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %} {{ movie.title }} {% endblock %}
+
+{% block content %}
+<!-- Display an individual movie and all truths -->
+    <img src={{ movie.poster }}>
+    <br>
+    Release Year: {{ movie.year }}
+    <br>
+    Plot: {{ movie.plot }}
+    <br>
+
+    {% if movie.website_url != "N/A" %}
+        <a href="{{ movie.website_url }}">Visit {{ movie.title }}'s website.</a>
+    {% endif %}
+
+
+    <br>
+    <br>
+
+    {% if movie_truths %}
+    <!-- If movie truths exist, display below. -->
+
+        See some Truth discussion:
+
+        {% for truth in movie_truths %} 
+
+            <ul>
+                <br>
+                <br>
+                <h4><li>{{ truth.truth_title }}</h4>
+                Submitted by: <li>{{ truth.username }}
+                <br>
+                <li>{{ truth.truth_submission }}
+                <br>
+
+                {% if truth.resource_submission %}
+        
+                Resource: <li><a href="{{ truth.resource_submission }}">{{ truth.resource_submission }}</a>
+
+                {% endif %}
+
+                <li>{{ truth.date_submitted }}
+                <br>
+                <br>
+            </ul>
+
+        {% endfor %}
+
+    {% else %}
+
+            <br>
+            <p>Boo! There are no truths here yet. 
+        {% endif %}
+
+    {% if "active_user" in session %}
+
+            <br>
+
+            <br>
+
+            <form action="/movies/{{ movie.movie_id }}" method="POST">
+
+                <label>Add your Truth:</label>
+                <br>
+                Title your Truth: <input type="text" name="title" required>
+                <br>
+                What's your Truth? <input type="text" name="truth" required>
+                <br>
+                Got any proof? <input type="url" name="resource">
+
+                <input type="submit" value="Add my truth!">
+                <br>
+                <br>
+          
+            </form>
+
+    {% else %}
+
+<div class="col text-center" id="movie-info-login">
+    <p>Want to be part of the discussion?</p>
+    <a href="/login" class="btn btn-info btn-lg">
+    <span class="glyphicon glyphicon-log-out"></span>Please log in to submit a Truth
+    </a>
+</div>
+
+
+    {% endif %}
+
+{% endblock %}
+

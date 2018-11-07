@@ -15,3 +15,13 @@ class createAccount extends React.Component {
         }
 
 }
+
+handleChange(evt) {
+    const { name, value } = evt.target;
+
+    this.setState({
+        [name] : value
+    }, () => {
+        if (name == 'password') || name == 'password'
+    })
+}

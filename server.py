@@ -192,7 +192,7 @@ def show_movie_info(movie_id):
     movie_truths = Truth.query.filter_by(movie_id=movie_id).all()
     replies = Reply.query.filter_by(movie_id=movie_id).all()
 
-    return render_template("new_movie_info_message_board.html",
+    return render_template("movie_info_message_board.html",
                             users=users,
                             movie=movie,
                             movie_truths=movie_truths,

@@ -1,55 +1,23 @@
-#homepage1 {
-  border: 1px solid #eee;
-  box-shadow: 0 2px 2px #ccc;
-  width: 200px;
-  padding: 20px;
+
+
+* {
+    box-sizing: border-box;
 }
 
-.container {
-    border: 2px solid #dedede;
-    background-color: #f1f1f1;
-    border-radius: 5px;
-    padding: 10px;
-    margin: 10px 0;
+body {
+    margin: 0;
+    font-family: 'Domine', serif;
 }
 
-/* Darker chat container */
-.darker {
-    border-color: #ccc;
-    background-color: #ddd;
+.header {
+    text-align: center;
+    padding: 32px;
 }
 
-/* Clear floats */
-.container::after {
-    content: "";
-    clear: both;
-    display: table;
+.row {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    padding: 0 4px;
 }
-
-/* Style images */
-.container img {
-    float: left;
-    max-width: 60px;
-    width: 100%;
-    margin-right: 20px;
-    border-radius: 50%;
-}
-
-/* Style the right image */
-.container img.right {
-    float: right;
-    margin-left: 20px;
-    margin-right:0;
-}
-
-/* Style time text */
-.time-right {
-    float: right;
-    color: #aaa;
-}
-
-/* Style time text */
-.time-left {
-    float: left;
-    color: #999;
-

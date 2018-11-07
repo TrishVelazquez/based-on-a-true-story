@@ -1,73 +1,154 @@
 {% extends 'base.html' %}
 
-{% block title %} Hey you {% endblock %}
-
 {% block content %}
 
-<h1><div class="Homepage" id="homepage1"></div></h1>
+<style>
+    body {
+        background: url(../static/img/film-swirl-long.jpg) no-repeat center center;
+        background-size: cover;
+    }
 
-    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.js"></script>
-    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.js"></script>
-    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
-    <script crossorigin type="text/babel">
+</style>
 
-function Homepage(props) {
-    return (
-    <p>{props.element}</p>
-    );
-}
+<div class="container-fluid">
+
+<div class="row" id="homepage-title">
+    <div class="col text-center">
+        <br>
+        <h1 style=font-size:100px>Based On A True Story</h1>
+    </div>
+</div>
+<br>
+
+<div class="row">
+    <div class="col">
+
+        {% if 'active_user' in session %}
+
+        <div class="container jumbotron text-center" id="grey">
+            <h3>Welcome Back</h3>
+            <p></p>
+            <a href="/logout" class="btn btn-info btn-lg">
+            <span class="glyphicon glyphicon-log-out"></span> LOG OUT
+            </a>
+        </div>
+
+        {% else %}
+
+        <div class="modal fade" id="modalLRForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog cascading-modal" role="document">
+            <div class="modal-content">
+
+              <div class="modal-c-tabs">
+
+                <ul class="nav nav-tabs md-tabs tabs-2 light-blue darken-3" role="tablist">
+                  <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#panel7" role="tab"><i class="fa fa-user mr-1"></i>
+                      LOGIN</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#panel8" role="tab"><i class="fa fa-user-plus mr-1"></i>
+                      CREATE AN ACCOUNT</a>
+                  </li>
+                </ul>
+
+                <div class="tab-content">
+                  <div class="tab-pane fade in show active" id="panel7" role="tabpanel">
+
+                    <div class="modal-body mb-1">
+                      <div class="md-form form-sm mb-5">
+                        <form id="form-fields-login" action="/login-verify" method="POST">
+                        <i class="fa fa-envelope prefix"></i>
+                        <p><h4>Welcome Back</p></h4>
+                        <input type="email" name="email" id="modalLRInput10" class="form-control form-control-sm validate" required>
+                        <label data-error="wrong" data-success="right" for="modalLRInput10">Email</label>
+                      </div>
+
+                      <div class="md-form form-sm mb-4">
+                        <i class="fa fa-lock prefix"></i>
+                        <input type="password" name="password" id="modalLRInput11" class="form-control form-control-sm validate" required>
+                        <label data-error="wrong" data-success="right" for="modalLRInput11">Password</label>
+                      </div>
+                      <div class="text-center mt-2">
+                        <button class="btn btn-info">LOG IN <i class="fa fa-sign-in ml-1"></i></button>
+                        </form>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-outline-info waves-effect ml-auto" data-dismiss="modal">CANCEL</button>
+                    </div>
+
+                  </div>
+
+                  <div class="tab-pane fade" id="panel8" role="tabpanel">
+
+                    <div class="modal-body">
+                      <div class="md-form form-sm mb-5">
+                        <form id="form-fields-create-account" action="/process-account" method="POST">
+                        <i class="fa fa-envelope prefix"></i>
+                        <p><h4>You Belong Here</p></h4>
+                        <input type="text" name="username" id="modalLRInput12" class="form-control form-control-sm validate" required>
+                        <label data-error="wrong" data-success="right" for="modalLRInput12">Username</label>
+                      </div>
+
+                      <div class="md-form form-sm mb-5">
+                        <i class="fa fa-lock prefix"></i>
+                        <input type="email" name="email" id="modalLRInput13" class="form-control form-control-sm validate" required>
+                        <label data-error="wrong" data-success="right" for="modalLRInput13">Email</label>
+                      </div>
+
+                      <div class="md-form form-sm mb-4">
+                        <i class="fa fa-lock prefix"></i>
+                        <input type="password" name="password" id="modalLRInput14" class="form-control form-control-sm validate" required>
+                        <label data-error="wrong" data-success="right" for="modalLRInput14">Password</label>
+                      </div>
+
+                      <div class="text-center form-sm mt-2">
+                        <button class="btn btn-info">SIGN UP <i class="fa fa-sign-in ml-1"></i></button>
+                        </form>
+                      </div>
+
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-outline-info waves-effect ml-auto" data-dismiss="modal">CANCEL</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="container jumbotron text-center" id="grey">
+            <h3>Ever hear of the movie tagline "based on a true story"?</h3>
+            <p>Movies that are based on a "true story" aren't always exactly true. More often than not, the stories we hear are embelished for the silver screen. But most of the time, the Truth is more interesting than the fiction.</p>
+            <p>Sound interesting? Then join the discussion.</p>
+            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#modalLRForm">LOG IN/SIGN UP</button>
+        </div>
 
 
-ReactDOM.render(
-    <Homepage element="Based on a True Story" />,
-    document.getElementById('homepage1')
-);
+        {% endif %}
+    </div>
+</div>
 
-ReactDOM.render(
-    <Homepage element="Search for a movie that's based on a true story." />,
-    document.getElementById('homepage2')
-);
+<div class="col text-center" id="movie-list-button">
+    <a href="/movie-list" class="btn btn-info btn-lg">
+    <span class="glyphicon"></span> Click here to browse movies with Truths
+    </a>
+</div>
 
-ReactDOM.render(
-    <Homepage element="Browse movies with Truths" />,
-    document.getElementById('homepage3')
-);
+<br>
 
-ReactDOM.render(
-    <Homepage element="Logout" />,
-    document.getElementById('homepage4')
-);
-
-
-</script>
-
-    <form id="homepage-search" method="GET" action="/search-results">
-
-        <div class="Homepage" id="homepage2"></div>
-        <input type="text" name="query" required>
-        <input type="submit">
-
-    </form>
-
-<h2><a href="/movie-list"><div class="Homepage" id="homepage3"></div></a></h2>
-
-    {% if 'active_user' in session %}
-
-        <h3><div class="Homepage" id="homepage4"></h3>
-        <a href="/logout">Click here to sign out.</a>
-
-    {% else %}
-
-        <h3>Login</h3>
-        <a href="/login"> Click here to sign in. </a>
-
-        <h3>Create an account.</h3>
-        <a href="/create-account">Click here to create an account.</a>
-
-    {% endif %}
-
-
-
-
+<div class="row text-center">
+    <div class="col">
+        <form id="homepage-search" method="GET" action="/search-results">
+            <p>Search for movies Based On A True Story</p>
+            <input type="text" name="query" required>
+            <input type="submit" class="btn btn-info btn-m">
+        </form>
+        <br>
+    </div>
+</div>
+<br>
 
 {% endblock %}
