@@ -14,7 +14,7 @@
 </style>
 
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+<!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
 <script src="lib/jquery.upvote.js"></script>
 <link rel="stylesheet" href="../static/lib/jquery.upvote.css">
 
@@ -23,31 +23,51 @@
     <span class="count">0</span>
     <a class="downvote"></a>
     <a class="star"></a>
-</div>
+</div> -->
 
     <div class="container">
+        <div class="row">
+            <div class="col text-center">
 
         <h2>{{ movie.title }}</h2>
         <img src={{ movie.poster }}>
-        <br>Release Year: {{ movie.year }}
-        <br>Plot: {{ movie.plot }}
+        <p>Release Year: {{ movie.year }}</p>
+        <p>Plot: {{ movie.plot }}</p>
 
             {% if movie.website_url != "N/A" %}
-                <h5><a href="{{ movie.website_url }}">Visit {{ movie.title }}'s website.</a></h5>
+                <p><a href="{{ movie.website_url }}">Visit {{ movie.title }}'s website.</a></p>
             {% endif %}
+            <br>
+            <br>
+        </div>
+        </div>
 
     </div>
 
     <!-- If statement to check if movie Truths exist -->
     <!-- If exist, display the submitted Truths -->
 
+
+
     {% if movie_truths %}
 
-        <br><h3>See The Discussion: </h3>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+<h3>See The Discussion: </h3>
+</div>
+</div>
+</div>
+
+
+
 
         {% for truth in movie_truths %}
 
-            <div class="container">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col" id="truths">
+
 
                 <h4>{{ truth.truth_title }}</h4>
                 Submitted By: <a href="/user/{{ truth.user_id}}">{{ truth.username }}</a>
@@ -59,10 +79,10 @@
                     <h5>Resource: <a href="{{ truth.resource_submission }}">External URL</a></h5>
 
                 {% endif %}
-                <h5>{{ truth.date_submitted }}</h5>
-                <script>$('#topic').upvote({count: 5, upvoted: 1});</script>
+                Submitted at: {{ truth.date_submitted }}
+<!--                 <script>$('#topic').upvote({count: 5, upvoted: 1});</script> -->
 
-            </div>
+
 
             <!-- Reply field. Movie_id and _truth_id passed in sub rosa -->
             <!-- Reply field will appear for every Truth -->
@@ -70,17 +90,22 @@
             {% if "active_user" in session %}
 
 
-            <form action="/add-reply" method="POST">
-                <fieldset>
+            <div class="row">
+    <div class="col">
+        <form id="reply-main-comment" method="POST" action="/add-reply">
+            <fieldset>
+            <input type="text" name="comment" required>
+            <input class="hidden" type="hidden" name="movie_id" value={{ movie.movie_id }} required>
+            <input class="hidden" type="hidden" name="truth_id" value={{ truth.truth_id }} required>
+            <input type="submit" value="REPLY" class="btn btn-info btn-s">
+        </fieldset>
+        </form>
+    </div>
+</div>
 
-                    <br>
-                    <input type="text" name="comment" required>
-                    <input class="hidden" type="hidden" name="movie_id" value={{ movie.movie_id }} required>
-                    <input class="hidden" type="hidden" name="truth_id" value={{ truth.truth_id }} required>
-                    <input type="submit" value="Reply">
-
-                </fieldset>
-            </form>
+        </div>
+    </div>
+</div>
 
 
             {% endif %}
@@ -90,33 +115,57 @@
             {% if truth.truth_id == reply.truth_id %}
 
             <!-- For each reply where the truth_id matches, display the replies -->
-
-                <div class="container">
+<div class="container">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col" id="replies">
 
                     <h4>Re: {{ truth.truth_title }}</h4>
                     Submitted By: <a href="/user/{{ reply.user_id}}">{{ reply.username }}</a>
                     <br>{{ reply.comment }}
-                    <h5>{{ reply.date_submitted }}</h5>
-                                    <script>$('#topic').upvote({count: 5, upvoted: 1});</script>
+               <br>
+                    Submitted at: {{ reply.date_submitted }}
+            <!--                         <script>$('#topic').upvote({count: 5, upvoted: 1});</script> -->
 
 
-                </div>
+
 
                 <!-- Also display reply field for each other reply -->
                 {% if "active_user" in session %}
 
 
-                <form action="/add-reply" method="POST">
+<div class="row">
+    <div class="col">
+        <form id="reply-sub-comment" method="POST" action="/add-reply">
+            <fieldset>
+            <input type="text" name="comment" required>
+            <input class="hidden" type="hidden" name="movie_id" value={{ movie.movie_id }} required>
+            <input class="hidden" type="hidden" name="truth_id" value={{ truth.truth_id }} required>
+            <input type="submit" value="REPLY" class="btn btn-info btn-s">
+        </fieldset>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+<!--                 <form action="/add-reply" method="POST">
                     <fieldset>
 
                         <br>
                         <input type="text" name="comment" required>
-                        <input class="hidden" type="hidden" name="movie_id" value={{ movie.movie_id }} required>
-                        <input class="hidden" type="hidden" name="truth_id" value={{ truth.truth_id }} required>
+                        
                         <input type="submit" value="Reply">
 
                     </fieldset>
-                </form>
+                </form> -->
+</div>
+</div>
+</div>
+</div>
 
 
 
@@ -130,34 +179,48 @@
 
     {% else %}
 
-        Boo! There are no Truths here yet.
-
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+<h3>Boo! There are no Truths here yet. </h3>
+</div>
+</div>
+</div>
     {% endif %}
 
     <!-- If statement to check for active user -->
 
     {% if "active_user" in session %}
 
-        <div class="container">
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col" id="truth-submission-form">
 
             <form action="/movies/{{ movie.movie_id }}" method="POST">
                 <fieldset>
 
-                    <label><h4>Add your Truth</label></h4>
+                    <label><h4>Add a Truth</label></h4>
+                    <p>What's the real story?</p>
                     <br>
-                    Title your Truth: <input type="text" name="title" required>
+                    Title: <input type="text" name="title" required>
                     <br>
-                    What's your Truth? <input type="text" name="truth" required>
+                    Body: <input type="text" name="truth" required>
                     <br>
-                    Got any proof? <input type="url" name="resource">
-                    <input type="submit" value="Add my truth!">
+                    Resource: <input type="url" name="resource">
+                    <input type="submit" value="SUBMIT" class="btn btn-info btn-s">
                     <br>
                     <br>
 
                 </fieldset>
             </form>
 
-        </div>
+
+</div>
+</div>
+</div>
+
 
     {% else %}
 <br>
