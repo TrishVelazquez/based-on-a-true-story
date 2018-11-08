@@ -292,7 +292,7 @@ def process_vote():
 
 if __name__ == "__main__":
 
-    app.debug = False
+    app.debug = False 
     app.jinja_env.auto_reload = app.debug
 
     connect_to_db(app, db_uri="postgresql:///truestory")
