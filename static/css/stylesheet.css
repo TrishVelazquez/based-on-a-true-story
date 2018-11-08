@@ -1,5 +1,4 @@
 
-
 * {
     box-sizing: border-box;
 }
@@ -20,4 +19,22 @@ body {
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
     padding: 0 4px;
+}
+
+#footer {
+    /*position: fixed;*/
+    bottom: 0;
+    width: 100%;
+    /*background-color: #E9ECEF;*/
+    color: #8B8B8B;
+    margin: 0;
+    font-family: 'Domine', serif;
+    font-size: 14px;
+
+}
+
+#flashed-messages {
+    color: #42A2B8;
+    margin: 2;
+    border-style: hidden;
 }
