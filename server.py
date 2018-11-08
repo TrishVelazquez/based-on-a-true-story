@@ -72,7 +72,7 @@ def process_new_user():
         db.session.commit()
 
         flash(u"Your account has been created! Please log in.")
-        return redirect("/login")
+        return redirect("/")
 
 
 ################################################################
