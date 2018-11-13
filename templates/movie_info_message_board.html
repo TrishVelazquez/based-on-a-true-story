@@ -1,10 +1,5 @@
 {% extends 'base.html' %}
-
-
-{% block title %} {{ movie.title }} {% endblock %}
-
 <!-- Display for movie -->
-
 {% block content %}
 
 <style>
@@ -14,231 +9,533 @@
 </style>
 
 
-<!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-<script src="lib/jquery.upvote.js"></script>
-<link rel="stylesheet" href="../static/lib/jquery.upvote.css">
 
-<div id="topic" class="upvote">
-    <a class="upvote"></a>
-    <span class="count">0</span>
-    <a class="downvote"></a>
-    <a class="star"></a>
-</div> -->
+<div class="container" id="search-results">
+    <div class="row">
+        <div class="col">
+            <div class="header"><h1> {{ movie.title }} </h1></div>
+        </div>
+    </div>
+</div>
 
-    <div class="container">
-        <div class="row">
-            <div class="col text-center">
-
-        <h2>{{ movie.title }}</h2>
-        <img src={{ movie.poster }}>
-        <p>Release Year: {{ movie.year }}</p>
-        <p>Plot: {{ movie.plot }}</p>
+<div class="container" id="movie-display">
+    <div class="row">
+        <div class="col text-center">
+            <img src={{ movie.poster}} class="rounded">
+            <p>Release Year: {{ movie.year }}</p>
+            <p>Plot: {{ movie.plot }}</p>
 
             {% if movie.website_url != "N/A" %}
-                <p><a href="{{ movie.website_url }}">Visit {{ movie.title }}'s website.</a></p>
+                <p><a href="{{ movie.website_url }}">Vitis {{movie.title }}'s website here.</a></p>
             {% endif %}
             <br>
             <br>
         </div>
-        </div>
-
     </div>
+</div>
 
     <!-- If statement to check if movie Truths exist -->
     <!-- If exist, display the submitted Truths -->
 
 
 
-    {% if movie_truths %}
+{% if movie_truths %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <h3>See The Discussion: </h3>
+            </div>
+        </div>
+    </div>
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col">
-<h3>See The Discussion: </h3>
-</div>
-</div>
-</div>
-
-
-
-
-        {% for truth in movie_truths %}
-
-<div class="container-fluid">
-    <div class="row">
-        <div class="col" id="truths">
+    {% for truth in movie_truths %}
 
 
-                <h4>{{ truth.truth_title }}</h4>
-                Submitted By: <a href="/user/{{ truth.user_id}}">{{ truth.username }}</a>
+<div class="col-sm-6">
+        <div id="tb-testimonial" class="testimonial testimonial-info-filled">
+            <div class="testimonial-section">
 
-                <br>{{ truth.truth_submission }}
-
-                {% if truth.resource_submission %}
-
-                    <h5>Resource: <a href="{{ truth.resource_submission }}">External URL</a></h5>
-
-                {% endif %}
-                Submitted at: {{ truth.date_submitted }}
-<!--                 <script>$('#topic').upvote({count: 5, upvoted: 1});</script> -->
+                <div class="container">
 
 
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-s-6">
+                                <div class="row" id="reply-comment-vote">
+                                    <div id="topic1" class="upvote">
+                                        <a class="upvote"></a>
+                                            <span class="count">0</span>
+                                        <a class="downvote"></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </div>
+                            <div class="col-s-6">
+                                <p><h4>{{ truth.truth_title }}</h4></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p>{{ truth.truth_submission }}</p>
+
+                    {% if truth.resource_submission %}
+                        Resource: <a href="{{ truth.resource_submission }}">Website</a>
+                    {% endif %}
+                    <p>Submitted at: {{ truth.date_submitted }}</p>
+
+                </div>
+            </div>
+            <div class="testimonial-desc">
+                <img src="https://api.adorable.io/avatars/285/{{ truth.username }}.png"/>
+                <div class="testimonial-writer">
+                <div class="testimonial-writer-name">Submitted by: <a href="/user/{{ truth.user_id }}">{{ truth.username }}</a></div>
+                    
 
             <!-- Reply field. Movie_id and _truth_id passed in sub rosa -->
             <!-- Reply field will appear for every Truth -->
 
-            {% if "active_user" in session %}
+        {% if "active_user" in session %}
 
-
-            <div class="row">
-    <div class="col">
-        <form id="reply-main-comment" method="POST" action="/add-reply">
-            <fieldset>
-            <input type="text" name="comment" required>
-            <input class="hidden" type="hidden" name="movie_id" value={{ movie.movie_id }} required>
-            <input class="hidden" type="hidden" name="truth_id" value={{ truth.truth_id }} required>
-            <input type="submit" value="REPLY" class="btn btn-info btn-s">
-        </fieldset>
-        </form>
+        <div class="row">
+            <div class="col">
+                <form id="reply-main-comment" method="POST" action="/add-reply">
+                    <fieldset>
+                        <input type="text" name="comment" required>
+                        <input class="hidden" type="hidden" name="movie_id" value={{ movie.movie_id }} required>
+                        <input class="hidden" type="hidden" name="truth_id" value={{ truth.truth_id }} required>
+                        <input type="submit" value="REPLY" class="btn btn-info btn-s">
+                    </fieldset>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
+</div>
+</div>
 
+
+
+        {% endif %}
+
+        {% for reply in replies %}
+
+            {% if truth.truth_id == reply.truth_id %}
+            <!-- For each reply where the truth_id matches, display the replies -->
+
+            <div class="container">
+                <div class="col-sm-6">
+                    <div id="tb-testimonial" class="testimonial testimonial-info">
+                        <div class="testimonial-section">
+
+
+                        <div class="container">
+
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-s-6">
+                                        <div class="row" id="reply-comment-vote">
+                                            <div id="topic2" class="upvote">
+                                                <a class="upvote"></a>
+                                                    <span class="count">-13</span>
+                                                <a class="downvote"></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </div>
+                                    <div class="col-s-6">
+                                        <p><h4>Re: {{ truth.truth_title }}</h4></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p>{{ reply.comment }}</p>
+                            <p>Submitted at: {{ reply.date_submitted }}</p>
+                        </div>
+                    </div>
+                 <div class="testimonial-desc">
+            <img src="https://api.adorable.io/avatars/285/{{ reply.username }}.png"/>
+            <div class="testimonial-writer">
+            <div class="testimonial-writer-name">Submitted by: <a href="/user/{{ reply.user_id }}">{{ reply.username }}</a></div>
+
+
+                <!-- Also display reply field for each other reply -->
+
+                {% if "active_user" in session %}
+
+                    <div class="row">
+                        <div class="col">
+                            <form id="reply-sub-comment" method="POST" action="/add-reply">
+                                <fieldset>
+                                <input type="text" name="comment" required>
+                                <input class="hidden" type="hidden" name="movie_id" value={{ movie.movie_id }} required>
+                                <input class="hidden" type="hidden" name="truth_id" value={{ truth.truth_id }} required>
+                                <input type="submit" value="REPLY" class="btn btn-info btn-s">
+                            </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 
-            {% endif %}
-
-        {% for reply in replies %}
-
-            {% if truth.truth_id == reply.truth_id %}
-
-            <!-- For each reply where the truth_id matches, display the replies -->
-<div class="container">
-<div class="container-fluid">
-    <div class="row">
-        <div class="col" id="replies">
-
-                    <h4>Re: {{ truth.truth_title }}</h4>
-                    Submitted By: <a href="/user/{{ reply.user_id}}">{{ reply.username }}</a>
-                    <br>{{ reply.comment }}
-               <br>
-                    Submitted at: {{ reply.date_submitted }}
-            <!--                         <script>$('#topic').upvote({count: 5, upvoted: 1});</script> -->
-
-
-
-
-                <!-- Also display reply field for each other reply -->
-                {% if "active_user" in session %}
-
-
-<div class="row">
-    <div class="col">
-        <form id="reply-sub-comment" method="POST" action="/add-reply">
-            <fieldset>
-            <input type="text" name="comment" required>
-            <input class="hidden" type="hidden" name="movie_id" value={{ movie.movie_id }} required>
-            <input class="hidden" type="hidden" name="truth_id" value={{ truth.truth_id }} required>
-            <input type="submit" value="REPLY" class="btn btn-info btn-s">
-        </fieldset>
-        </form>
-    </div>
-</div>
-
-
-
-
-
-
-<!--                 <form action="/add-reply" method="POST">
-                    <fieldset>
-
-                        <br>
-                        <input type="text" name="comment" required>
-                        
-                        <input type="submit" value="Reply">
-
-                    </fieldset>
-                </form> -->
-</div>
-</div>
-</div>
-</div>
-
-
-
                 {% endif %}
 
             {% endif %}
 
         {% endfor %}
 
-        {% endfor %}
+    {% endfor %}
 
-    {% else %}
+{% else %}
 
 <div class="container-fluid">
     <div class="row">
         <div class="col">
-<h3>Boo! There are no Truths here yet. </h3>
-</div>
-</div>
+            <p><h3>Boo! There are no Truths here yet. </h3></p>
+        </div>
+    </div>
 </div>
 
-    {% endif %}
+{% endif %}
 
     <!-- If statement to check for active user -->
 
-    {% if "active_user" in session %}
+{% if "active_user" in session %}
+    
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col" id="truth-submission-form">
+                <form action="/movies/{{ movie.movie_id }}" method="POST">
+                    <fieldset>
+                        <label><h4>Add a Truth</h4></label>
+                        <p>What's the real story?</p>
+                        <p>Title: <input type="text" name="title" placeholder="Required" required></p>
+                        <p>Text: <input type="text" name="truth" placeholder="What are your thoughts?" required></p>
+                        <p>Resource: <input type="url" name="resource" placeholder="(Optional)" required></p>
+                        <input type="submit" value="SUBMIT" class="btn btn-info btn-s">
+                        <br>
+                        <br>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% else %}
+<div class="container">
+    <div class="col text-center" id="movie-info-login">
+        <p>Want to be a part of the discussion? </p>
+        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#modalLRForm">Please log in to submit a Truth</button>
+    </div>
 
 
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col" id="truth-submission-form">
 
-            <form action="/movies/{{ movie.movie_id }}" method="POST">
-                <fieldset>
+        <div class="modal fade" id="modalLRForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog cascading-modal" role="document">
+            <div class="modal-content">
 
-                    <label><h4>Add a Truth</label></h4>
-                    <p>What's the real story?</p>
-                    <br>
-                    Title: <input type="text" name="title" required>
-                    <br>
-                    Body: <input type="text" name="truth" required>
-                    <br>
-                    Resource: <input type="url" name="resource">
-                    <input type="submit" value="SUBMIT" class="btn btn-info btn-s">
-                    <br>
-                    <br>
+              <div class="modal-c-tabs">
 
-                </fieldset>
-            </form>
+                <ul class="nav nav-tabs md-tabs tabs-2 light-blue darken-3" role="tablist">
+                  <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#panel7" role="tab"><i class="fa fa-user mr-1"></i>
+                      LOGIN</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#panel8" role="tab"><i class="fa fa-user-plus mr-1"></i>
+                      CREATE AN ACCOUNT</a>
+                  </li>
+                </ul>
+
+                <div class="tab-content">
+                  <div class="tab-pane fade in show active" id="panel7" role="tabpanel">
+
+                    <div class="modal-body mb-1">
+                      <div class="md-form form-sm mb-5">
+                        <form id="form-fields-login" action="/login-verify" method="POST">
+                        <i class="fa fa-envelope prefix"></i>
+                        <p><h4>Welcome Back</p></h4>
+                        <input type="email" name="email" id="modalLRInput10" class="form-control form-control-sm validate" required>
+                        <label data-error="wrong" data-success="right" for="modalLRInput10">Email</label>
+                      </div>
+
+                      <div class="md-form form-sm mb-4">
+                        <i class="fa fa-lock prefix"></i>
+                        <input type="password" name="password" id="modalLRInput11" class="form-control form-control-sm validate" required>
+                        <label data-error="wrong" data-success="right" for="modalLRInput11">Password</label>
+                      </div>
+                      <div class="text-center mt-2">
+                        <button class="btn btn-info">LOG IN <i class="fa fa-sign-in ml-1"></i></button>
+                        </form>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-outline-info waves-effect ml-auto" data-dismiss="modal">CANCEL</button>
+                    </div>
+
+                  </div>
+
+                  <div class="tab-pane fade" id="panel8" role="tabpanel">
+
+                    <div class="modal-body">
+                      <div class="md-form form-sm mb-5">
+                        <form id="form-fields-create-account" action="/process-account" method="POST">
+                        <i class="fa fa-envelope prefix"></i>
+                        <p><h4>You Belong Here</p></h4>
+                        <input type="text" name="username" id="modalLRInput12" class="form-control form-control-sm validate" required>
+                        <label data-error="wrong" data-success="right" for="modalLRInput12">Username</label>
+                      </div>
+
+                      <div class="md-form form-sm mb-5">
+                        <i class="fa fa-lock prefix"></i>
+                        <input type="email" name="email" id="modalLRInput13" class="form-control form-control-sm validate" required>
+                        <label data-error="wrong" data-success="right" for="modalLRInput13">Email</label>
+                      </div>
+
+                      <div class="md-form form-sm mb-4">
+                        <i class="fa fa-lock prefix"></i>
+                        <input type="password" name="password" id="modalLRInput14" class="form-control form-control-sm validate" required>
+                        <label data-error="wrong" data-success="right" for="modalLRInput14">Password</label>
+                      </div>
+
+                      <div class="text-center form-sm mt-2">
+                        <button class="btn btn-info">SIGN UP <i class="fa fa-sign-in ml-1"></i></button>
+                        </form>
+                      </div>
+
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-outline-info waves-effect ml-auto" data-dismiss="modal">CANCEL</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
 
 
-</div>
-</div>
-</div>
-
-</div>
-</div>
-</div>
+{% endif %}
 
 
 
-    {% else %}
-<br>
-<div class="col text-center" id="movie-info-login">
-    <p>Want to be part of the discussion?</p>
-    <a href="/login" class="btn btn-info btn-lg">
-    <span class="glyphicon glyphicon-log-out"></span>Please log in to submit a Truth
-    </a>
-</div>
 
-    {% endif %}
+<!-- Script tag for jquery upvote -->
+<!-- Temporary until js file is fixed -->
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+    
+    ;(function($) {
+    "use strict";
+    var namespace = 'upvote';
+    var dot_namespace = '.' + namespace;
+    var upvote_css = 'upvote';
+    var dot_upvote_css = '.' + upvote_css;
+    var upvoted_css = 'upvote-on';
+    var dot_upvoted_css = '.' + upvoted_css;
+    var downvote_css = 'downvote';
+    var dot_downvote_css = '.' + downvote_css;
+    var downvoted_css = 'downvote-on';
+    var dot_downvoted_css = '.' + downvoted_css;
+    var star_css = 'star';
+    var dot_star_css = '.' + star_css;
+    var starred_css = 'star-on';
+    var dot_starred_css = '.' + starred_css;
+    var count_css = 'count';
+    var dot_count_css = '.' + count_css;
+    var enabled_css = 'upvote-enabled';
+
+    function init(dom, options) {
+        return dom.each(function() {
+            var jqdom = $(this);
+            methods.destroy(jqdom);
+
+            var count = parseInt(jqdom.find(dot_count_css).text(), 10);
+            count = isNaN(count) ? 0 : count;
+            var initial = {
+                id: jqdom.attr('data-id'),
+                count: count,
+                upvoted: jqdom.find(dot_upvoted_css).length,
+                downvoted: jqdom.find(dot_downvoted_css).length,
+                starred: jqdom.find(dot_starred_css).length,
+                callback: function() {}
+            };
+
+            var data = $.extend(initial, options);
+            if (data.upvoted && data.downvoted) {
+                data.downvoted = false;
+            }
+
+            jqdom.data(namespace, data);
+            render(jqdom);
+            setupUI(jqdom);
+        });
+    }
+
+    function setupUI(jqdom) {
+        jqdom.find(dot_upvote_css).addClass(enabled_css);
+        jqdom.find(dot_downvote_css).addClass(enabled_css);
+        jqdom.find(dot_star_css).addClass(enabled_css);
+        jqdom.find(dot_upvote_css).on('click.' + namespace, function() {
+            jqdom.upvote('upvote');
+        });
+        jqdom.find('.downvote').on('click.' + namespace, function() {
+            jqdom.upvote('downvote');
+        });
+        jqdom.find('.star').on('click.' + namespace, function() {
+            jqdom.upvote('star');
+        });
+    }
+
+    function _click_upvote(jqdom) {
+        jqdom.find(dot_upvote_css).click();
+    }
+
+    function _click_downvote(jqdom) {
+        jqdom.find(dot_downvote_css).click();
+    }
+
+    function _click_star(jqdom) {
+        jqdom.find(dot_star_css).click();
+    }
+
+    function render(jqdom) {
+        var data = jqdom.data(namespace);
+        jqdom.find(dot_count_css).text(data.count);
+        if (data.upvoted) {
+            jqdom.find(dot_upvote_css).addClass(upvoted_css);
+            jqdom.find(dot_downvote_css).removeClass(downvoted_css);
+        } else if (data.downvoted) {
+            jqdom.find(dot_upvote_css).removeClass(upvoted_css);
+            jqdom.find(dot_downvote_css).addClass(downvoted_css);
+        } else {
+            jqdom.find(dot_upvote_css).removeClass(upvoted_css);
+            jqdom.find(dot_downvote_css).removeClass(downvoted_css);
+        }
+        if (data.starred) {
+            jqdom.find(dot_star_css).addClass(starred_css);
+        } else {
+            jqdom.find(dot_star_css).removeClass(starred_css);
+        }
+    }
+
+    function callback(jqdom) {
+        var data = jqdom.data(namespace);
+        data.callback(data);
+    }
+
+    function upvote(jqdom) {
+        var data = jqdom.data(namespace);
+        if (data.upvoted) {
+            data.upvoted = false;
+            --data.count;
+        } else {
+            data.upvoted = true;
+            ++data.count;
+            if (data.downvoted) {
+                data.downvoted = false;
+                ++data.count;
+            }
+        }
+        render(jqdom);
+        callback(jqdom);
+        return jqdom;
+    }
+
+    function downvote(jqdom) {
+        var data = jqdom.data(namespace);
+        if (data.downvoted) {
+            data.downvoted = false;
+            ++data.count;
+        } else {
+            data.downvoted = true;
+            --data.count;
+            if (data.upvoted) {
+                data.upvoted = false;
+                --data.count;
+            }
+        }
+        render(jqdom);
+        callback(jqdom);
+        return jqdom;
+    }
+
+    function star(jqdom) {
+        var data = jqdom.data(namespace);
+        data.starred = ! data.starred;
+        render(jqdom);
+        callback(jqdom);
+        return jqdom;
+    }
+
+    function count(jqdom) {
+        return jqdom.data(namespace).count;
+    }
+
+    function upvoted(jqdom) {
+        return jqdom.data(namespace).upvoted;
+    }
+
+    function downvoted(jqdom) {
+        return jqdom.data(namespace).downvoted;
+    }
+
+    function starred(jqdom) {
+        return jqdom.data(namespace).starred;
+    }
+
+    var methods = {
+        init: init,
+        count: count,
+        upvote: upvote,
+        upvoted: upvoted,
+        downvote: downvote,
+        downvoted: downvoted,
+        starred: starred,
+        star: star,
+        _click_upvote: _click_upvote,
+        _click_downvote: _click_downvote,
+        _click_star: _click_star,
+        destroy: destroy
+    };
+
+    function destroy(jqdom) {
+        return jqdom.each(function() {
+            $(window).unbind(dot_namespace);
+            $(this).removeClass(enabled_css);
+            $(this).removeData(namespace);
+        });
+    }
+
+    $.fn.upvote = function(method) {  
+        var args;
+        if (methods[method]) {
+            args = Array.prototype.slice.call(arguments, 1);
+            args.unshift(this);
+            return methods[method].apply(this, args);
+        }
+        if (typeof method === 'object' || ! method) {
+            args = Array.prototype.slice.call(arguments);
+            args.unshift(this);
+            return methods.init.apply(this, args);
+        }
+        $.error('Method ' + method + ' does not exist on jQuery.upvote');
+    };  
+})(jQuery);
+
+$('#topic1').upvote({count: 8});
+$('#topic2').upvote({count: -2});
+</script>
 
 {% endblock %}
 

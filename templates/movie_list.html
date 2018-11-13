@@ -8,8 +8,14 @@
 </style>
 
 <div class="container" id="movie-list-container">
+    <div class="row">
+        <div class="col">
 <div class="header"><h1> Movies people are talking about.</h1>
 </div>
+</div>
+</div>
+</div>
+
 
 <div class="row" id="movie-row">
 
@@ -18,10 +24,12 @@
 <div class="col text-center" id="movie-display"> 
 
     
-    <a href="/movies/{{ movie.movie_id}}"><img src={{ movie.poster }}></a>
+    <a href="/movies/{{ movie.movie_id}}"><img src={{ movie.poster }} class="rounded"></a>
     <div class="text-center"><h3>{{ movie.title }}</h3></div>
 
 </div>
+
+
 
 {% endfor %}
 </div>
@@ -30,7 +38,8 @@
 <div class="row text-center">
     <div class="col">
         <form id="homepage-search" method="GET" action="/search-results">
-            <p>Don't see what you're looking for?</p>
+            <br>
+            <p><h4>Don't see the movie you're looking for?</p></h4>
             <input type="text" name="query" placeholder=" Search for a movie" required>
             <input type="submit" class="btn btn-info btn-m">
         </form>

@@ -2,62 +2,111 @@
 
 {% block content %} 
 
-<h1>{{ user.username }}</h1>
+<style>
+    body {
+        background-image: url(../static/img/tri.png);
+    }
+</style>
 
+<div class="container-fluid" id="user-display">
+    <div class="row">
+        <div class="col-xs-6">
+            <div class="testimonial-desc">
+                <img src="https://api.adorable.io/avatars/285/{{ user.username }}.png" alt="" />
+            </div>
+        </div>
+        <div class="col-xs-6">
+            <p><h1>{{ user.username }}</h1></p>   
+        </div>
+    </div>
+</div>
 
 {% if user_truths %}
 
-<h2>Submitted Truths</h2>
-
+<div class="container" id="search-results">
+    <div class="row">
+        <div class="col">
+            <p><h2> Submitted Truths </h2></p>
+        </div>
+    </div>
+</div>
 
     {% for truth in user_truths %}
 
-       
-            {% for movie in movies %}
-                {% if movie.movie_id == truth.movie_id %}
-                    <br><a href="/movies/{{ truth.movie_id }}">{{ movie.title }}</a>
-                {% endif %}
-            {% endfor %}
-            
-        <br><h4>{{ truth.truth_title }}</h4>
-        {{ truth.truth_submission }}
-        <br>{{ truth.resource_submission }}
-        <h5>{{ truth.date_submitted }}</h5>
-        <br>
+    <div class="container jumbotron">
+        <div class="row">
+            <div class="col">
+                {% for movie in movies %}
+                    {% if movie.movie_id == truth.movie_id %}
+
+                        <p><h4><a href="/movies/{{ truth.movie_id }}">{{ movie.title }}</a></p></h4>
+
+                    {% endif %}
+                {% endfor %}
+
+                <p><h4>{{ truth.truth_title }}</h4></p>
+                <p>{{ truth.truth_submission }}</p>
+                <p><a href={{ truth.resource_submission }}>Website</a></p>
+                {{ truth.date_submitted }}
+            </div>
+        </div>
+    </div>
 
     {% endfor %}
 
 {% else %}
 
-    Quietly lurking.
-    <br> For now.  
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <p>Quietly Lurking.</p>
+            <p>For now.</p>
+        </div>
+    </div>
+</div>
+
 
 {% endif %}
 
-
 {% if user_replies %}
 
-    <h2>Discussion</h2>
+<div class="container" id="search-results">
+    <div class="row">
+        <div class="col">
+            <p><h2> Replies </h2></p>
+        </div>
+    </div>
+</div>
 
     {% for reply in user_replies %}
 
-        {% for movie in movies %}
-        {% if movie.movie_id == reply.movie_id %}
-
-        <br><a href="/movies/{{ reply.movie_id }}"><br>{{ movie.title }}</a>
-
-        {% endif %}
-        {% endfor %}
-        <br>{{ reply.comment }}
-        <h5>{{ reply.date_submitted }}</h5>
+    <div class="container jumbotron">
+        <div class="row">
+            <div class="col">
+                {% for movie in movies %}
+                    {% if movie.movie_id == reply.movie_id %}
+                        <p><h4><a href="/movies/{{ reply.movie_id }}"><br>{{ movie.title }}</a></h4></p>
+                    {% endif %}
+                {% endfor %}
+                <p>{{ reply.comment }}</p>
+                <p>{{ reply.date_submitted }}</p>
+            </div>
+        </div>
+    </div>
         
 
-    {% endfor %}
+{% endfor %}
 
 {% else %}
 
-    <br>
-    <br> :)
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <p>Quietly Lurking.</p>
+            <p>For now.</p>
+        </div>
+    </div>
+</div>
 
 {% endif %}
 

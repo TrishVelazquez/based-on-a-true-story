@@ -1,67 +1,112 @@
 {% extends 'base.html' %}
 
-{% block title %} Movies {% endblock %}
-
 {% block content %}
 
-
-        <h2> This movie matches your search: </h2>
-
-        <ul id="search-result">
-
-            <img src={{ poster }}>
-            <h1>{{ title }}</h1>
-
-            {% if 'Biography' in genre or 'History' in genre %}
-
-                    <h4>
-                        <li> Release Year: {{ year }}</li>
-                        <li>Plot: {{ plot }} </li>
-                    </h4>
-                    <br>
+<style>
+    body {
+        background-image: url(../static/img/tri.png);
+    }
+</style>
 
 
-                    <h2>Yeah, that movie is based on a true story!</h2> 
+<div class="container" id="search-results">
+    <div class="row">
+        <div class="col">
+            <div class="header"><h1> This movie matches your search: </h1></div>
+        </div>
+    </div>
+</div>
 
-                    {% for movie in movies %}
+       
 
-                        {% if movie.title == title %}
+<div class="container">
+    <div class="row">
+        <div class="col text-center">
 
-                        <a href="/movies/{{movie.movie_id}}">Click here to see the discussion.</a>
-                        <br>
-                        <br>
+            <img src={{ poster }} class="rounded">
+            <p><h1>{{ title }}</h1></p>
 
-                        Not the movie you were looking for? Search again.
-                        <br>
-                        <form method="GET" action="/search-results">
+{% if 'Biography' in genre or 'History' in genre %}
 
-                            <input type="text" name="query" required>
-                            <input type="submit">
+    <p>Release Year: {{ year }}</p>
+    <p>Plot: {{ plot }}</p>
+    <br>
 
-                        </form>
 
-                        {% endif %}
+    <p><h2>Yeah, that movie is based on a true story!</h2></p>
 
-                    {% endfor %}
+    {% for movie in movies %}
 
-            {% else %}
+        {% if movie.title == title %}
 
-                    <h2>
-                    Hmmmm. That movie isn't based on a true story.
-                    <br>
-                    Want to search again?
-                    <br>
-                    </h2>
+            <div class="col text-center" id="follow-through-button">
+                <a href="/movies/{{movie.movie_id}}" class="btn btn-info btn-lg">
+                <span class="glyphicon"></span> Click here to see the discussion
+                </a>
+            </div>
 
-                    <form id="search-again-search" method="GET" action="/search-results">
+        </div>
+    </div>
+</div>
 
-                        Search for a movie that's based on true story. 
-                        <br>
-                        <input type="text" name="query" required>
-                        <input type="submit">
 
-                    </form>
 
-            {% endif %}
+
+
+<div class="container">
+<div class="row text-center">
+    <div class="col">
+        <br>
+        <br>
+        <br>
+        <br>
+        <h4><p> Not the movie you were looking for? </p></h4>
+        <h5><p> Search again. </p></h5>
+            <form id="search-results-search" method="GET" action="/search-results">
+                <p>Search for a movie that's Based On A True Story</p>
+                <input type="text" name="query" required>
+                <input type="submit" class="btn btn-info btn-m">
+            </form>
+        <br>
+    </div>
+</div>
+</div>
+
+
+
+
+
+
+
+</form>
+
+{% endif %}
+
+{% endfor %}
+
+{% else %}
+
+<div class="container">
+<div class="row text-center">
+    <div class="col">
+        <br>
+        <h2><p> Hmmm. That movie isn't based on a true story.</p></h2>
+        <br>
+        <h3><p> Want to search again? </p></h3>
+            <form id="search-results-search" method="GET" action="/search-results">
+                <p>Search for a movie that's Based On A True Story</p>
+                <input type="text" name="query" required>
+                <input type="submit" class="btn btn-info btn-m">
+            </form>
+        <br>
+    </div>
+</div>
+</div>
+
+
+
+
+
+{% endif %}
 
 {% endblock %}
